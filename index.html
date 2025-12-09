@@ -1,1348 +1,1249 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burnout - Entenda, Previna, Cuide-se</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            background: #ffffff;
-            color: #1a1a1a;
-            transition: opacity 0.5s ease;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header e Navegação */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            padding: 15px 0;
-            transition: all 0.3s ease;
-        }
-
-        header.scrolled {
-            padding: 10px 0;
-            background: rgba(255, 255, 255, 0.98);
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1a1a1a;
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: #f4c2c2;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-menu li {
-            margin-left: 30px;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #1a1a1a;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-menu a:after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #f4c2c2;
-            transition: width 0.3s ease;
-        }
-
-        .nav-menu a:hover:after {
-            width: 100%;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            background: linear-gradient(135deg, rgba(244, 194, 194, 0.8) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(26, 26, 26, 0.8) 100%),
-                        url('images/IMG-20250821-WA0058.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #1a1a1a;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 1;
-        }
-
-        .hero-content {
-            max-width: 900px;
-            padding: 2rem;
-            animation: fadeInUp 1s ease-out;
-            position: relative;
-            z-index: 2;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-            letter-spacing: -2px;
-            text-shadow: 2px 2px 4px rgba(244, 194, 194, 0.8);
-        }
-
-        .hero p {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            margin-bottom: 2rem;
-            color: #333;
-            font-weight: 500;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: #f4c2c2;
-            border: 2px solid #1a1a1a;
-            color: #1a1a1a;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            margin: 0 0.5rem;
-            box-shadow: 0 4px 15px rgba(244, 194, 194, 0.4);
-        }
-
-        .cta-button:hover {
-            background: #1a1a1a;
-            color: #f4c2c2;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        /* Sections */
-        .section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-dark {
-            background: #1a1a1a;
-            color: white;
-            margin: 0;
-            max-width: none;
-            position: relative;
-        }
-
-        .section-light {
-            background: #f8f8f8;
-            color: #1a1a1a;
-            margin: 0;
-            max-width: none;
-        }
-
-        .section-pink {
-            background: #f4c2c2;
-            color: #1a1a1a;
-            margin: 0;
-            max-width: none;
-        }
-
-        .section h2 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            margin-bottom: 2rem;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 3rem;
-            color: #666;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Cards Grid */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid #f4c2c2;
-            box-shadow: 0 5px 15px rgba(244, 194, 194, 0.2);
-        }
-
-        .section-dark .card {
-            background: #2a2a2a;
-            color: white;
-            border: 2px solid #f4c2c2;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(244, 194, 194, 0.3);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-            color: #f4c2c2;
-        }
-
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .section-dark .card h3 {
-            color: white;
-        }
-
-        /* Burnout Visual */
-        .burnout-visual {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 300px;
-            height: 300px;
-            opacity: 0.2;
-            z-index: 1;
-        }
-
-        .burnout-visual img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 20px;
-            filter: grayscale(50%) contrast(120%);
-        }
-
-        /* Symptoms Grid */
-        .symptoms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .symptom-item {
-            background: #1a1a1a;
-            padding: 1.5rem;
-            border-radius: 15px;
-            color: white;
-            text-align: center;
-            font-weight: 500;
-            transform: scale(0.95);
-            transition: all 0.3s ease;
-            border: 2px solid #f4c2c2;
-        }
-
-        .symptom-item:hover {
-            transform: scale(1);
-            box-shadow: 0 15px 30px rgba(244, 194, 194, 0.4);
-        }
-
-        .symptoms-section {
-            position: relative;
-            background: #f8f8f8;
-        }
-
-        .symptoms-bg {
-            position: absolute;
-            left: 5%;
-            top: 20%;
-            width: 250px;
-            height: 350px;
-            opacity: 0.15;
-            z-index: 1;
-        }
-
-        .symptoms-bg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 15px;
-        }
-
-        /* Prevention Tips */
-        .prevention-tips {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .tip-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid #f4c2c2;
-            color: #1a1a1a;
-        }
-
-        .tip-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .prevention-visual {
-            position: absolute;
-            right: 5%;
-            bottom: 10%;
-            width: 200px;
-            height: 250px;
-            opacity: 0.2;
-            z-index: 1;
-        }
-
-        .prevention-visual img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 15px;
-            filter: sepia(20%) saturate(80%);
-        }
-
-        /* Stats */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 2rem;
-            background: #2a2a2a;
-            border-radius: 15px;
-            border: 2px solid #f4c2c2;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #f4c2c2;
-            display: block;
-        }
-
-        /* Inspirational Section */
-        .inspirational-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            margin: 4rem 0;
-            align-items: center;
-        }
-
-        .inspiration-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 2px solid #f4c2c2;
-            transition: all 0.3s ease;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .inspiration-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(244, 194, 194, 0.3);
-        }
-
-        .inspiration-image {
-            width: 100%;
-            height: 250px;
-            margin: 0 auto 1rem;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-
-        .inspiration-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .inspiration-card:hover .inspiration-image img {
-            transform: scale(1.05);
-        }
-
-        .quote-text {
-            font-size: 1.1rem;
-            font-style: italic;
-            color: #666;
-            line-height: 1.6;
-            margin-top: 1rem;
-        }
-
-        /* Messages Section */
-        .messages-section {
-            background: linear-gradient(135deg, #f4c2c2 0%, #ffffff 100%);
-            padding: 5rem 2rem;
-        }
-
-        .messages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 3rem auto 0;
-        }
-
-        .message-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-
-        .message-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            border-color: #f4c2c2;
-        }
-
-        .message-image {
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-        }
-
-        .message-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .message-card:hover .message-image img {
-            transform: scale(1.1);
-        }
-
-        .message-content {
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .message-text {
-            font-size: 1rem;
-            color: #666;
-            font-style: italic;
-            line-height: 1.5;
-        }
-
-        /* Causes Section */
-        .causes-section {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            color: white;
-            padding: 5rem 2rem;
-        }
-
-        .causes-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .cause-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            border-left: 5px solid #f4c2c2;
-            transition: all 0.3s ease;
-        }
-
-        .cause-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* Recovery Section */
-        .recovery-steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .recovery-step {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            text-align: center;
-            border-bottom: 5px solid #f4c2c2;
-        }
-
-        .recovery-step:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(244, 194, 194, 0.3);
-        }
-
-        .step-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #f4c2c2;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        /* Footer */
-        .footer {
-            background: #1a1a1a;
-            color: white;
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .footer h3 {
-            color: #f4c2c2;
-            margin-bottom: 1rem;
-        }
-
-        .resources-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-            text-align: left;
-        }
-
-        .resource-item {
-            background: #2a2a2a;
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 3px solid #f4c2c2;
-        }
-
-        .social-links {
-            margin-top: 2rem;
-        }
-
-        .social-links a {
-            display: inline-block;
-            margin: 0 10px;
-            width: 40px;
-            height: 40px;
-            background: #f4c2c2;
-            border-radius: 50%;
-            color: #1a1a1a;
-            line-height: 40px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            transform: translateY(-5px);
-            background: white;
-        }
-
-        /* Floating Elements */
-        .floating-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .floating-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(244, 194, 194, 0.1);
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .floating-circle:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 15%;
-            left: 5%;
-            animation-delay: 0s;
-        }
-
-        .floating-circle:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 70%;
-            right: 15%;
-            animation-delay: 3s;
-        }
-
-        .floating-circle:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            top: 85%;
-            left: 25%;
-            animation-delay: 6s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        /* Lightbox */
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox-content {
-            max-width: 90%;
-            max-height: 90%;
-            position: relative;
-        }
-
-        .lightbox-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Back to Top Button */
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: #f4c2c2;
-            color: #1a1a1a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(244, 194, 194, 0.4);
-            transition: all 0.3s ease;
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .back-to-top:hover {
-            background: #1a1a1a;
-            color: #f4c2c2;
-            transform: translateY(-5px);
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                flex-direction: column;
-                background: white;
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                padding: 2rem 0;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .nav-menu li {
-                margin: 2rem 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero h1 {
-                font-size: 3rem;
-            }
-            
-            .section {
-                padding: 3rem 1rem;
-            }
-            
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .burnout-visual,
-            .symptoms-bg,
-            .prevention-visual {
-                display: none;
-            }
-
-            .inspirational-section {
-                grid-template-columns: 1fr;
-            }
-
-            .messages-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-button {
-                display: block;
-                margin: 1rem auto;
-                width: 80%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Burnout — Entenda, Previna, Cuide-se</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Burnout: quando o corpo grita o que a mente não aguenta mais. Entenda os sinais, previna e cuide da sua saúde mental."
+  />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --accent: #9b5cff;
+      --accent-soft: rgba(155, 92, 255, 0.12);
+      --accent-strong: #d16eff;
+      --text: #f5f5f7;
+      --muted: #a0a3b1;
+      --danger: #ff6b81;
+      --card: #11162a;
+      --card-soft: rgba(15, 23, 42, 0.9);
+      --border: rgba(148, 163, 184, 0.25);
+      --radius-xl: 22px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.8);
+      --shadow-light: 0 0 40px rgba(155, 92, 255, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #1f143c 0, #050816 40%, #020617 100%);
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    ::selection {
+      background: rgba(155, 92, 255, 0.6);
+      color: #fff;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+      border-radius: 18px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to bottom, rgba(5, 8, 22, 0.9), rgba(5, 8, 22, 0.7), transparent);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 10%, #f97316, #ec4899, #6366f1);
+      box-shadow: var(--shadow-light);
+    }
+
+    .brand-title {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-strong);
+      border-color: rgba(209, 110, 255, 0.7);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      border: 1px solid rgba(209, 213, 219, 0.2);
+      background: radial-gradient(circle at top left, rgba(155, 92, 255, 0.3), rgba(15, 23, 42, 0.95));
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.8);
+      cursor: pointer;
+    }
+
+    .nav-cta span.icon {
+      font-size: 1.1rem;
+    }
+
+    /* MAIN WRAPPER */
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    section {
+      margin-top: 72px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .section-label-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #facc15, #f97316, #ec4899);
+    }
+
+    .section-title {
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      max-width: 620px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw + 1rem, 2.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(120deg, #f97316, #ec4899, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 0.98rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .hero-tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(248, 250, 252, 0.08);
+      margin-bottom: 14px;
+      color: #e5e7eb;
+    }
+
+    .hero-tagline-badge {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.06);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.86rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      box-shadow: var(--shadow-light);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 35px rgba(79, 70, 229, 0.8);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+      background: rgba(15, 23, 42, 0.95);
+      border-color: rgba(209, 213, 219, 0.9);
+      color: #e5e7eb;
+    }
+
+    .hero-note {
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-note strong {
+      color: #e5e7eb;
+    }
+
+    .hero-visual {
+      position: relative;
+      padding: 18px;
+      border-radius: 26px;
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.4), rgba(15, 23, 42, 0.98));
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .hero-visual-orbit {
+      position: absolute;
+      inset: 12px;
+      border-radius: 26px;
+      border: 1px dashed rgba(148, 163, 184, 0.5);
+      opacity: 0.7;
+    }
+
+    .hero-visual-img {
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-visual-img img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .hero-stat {
+      position: absolute;
+      left: 22px;
+      bottom: 26px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 0.78rem;
+      max-width: 210px;
+      box-shadow: 0 16px 35px rgba(15, 23, 42, 0.95);
+    }
+
+    .hero-stat span.value {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--danger);
+    }
+
+    .hero-stat span.label {
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .hero-pill {
+      position: absolute;
+      right: 18px;
+      top: 22px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(251, 191, 36, 0.7);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-pill-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #facc15, #f97316);
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.9);
+    }
+
+    /* GRID UTILITIES */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: flex-start;
+      margin-top: 26px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      section {
+        margin-top: 56px;
+      }
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-soft);
+      border-radius: var(--radius-xl);
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.8);
+    }
+
+    .card-soft {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: var(--radius-xl);
+      padding: 16px 18px;
+    }
+
+    .card-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .card-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .pill-danger {
+      border-color: rgba(248, 113, 113, 0.7);
+      color: #fecaca;
+      background: rgba(127, 29, 29, 0.35);
+    }
+
+    .pill-accent {
+      border-color: rgba(129, 140, 248, 0.8);
+      color: #c7d2fe;
+      background: rgba(30, 64, 175, 0.4);
+    }
+
+    .mini-tag {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* LISTS */
+    ul.clean {
+      list-style: none;
+    }
+
+    ul.clean li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    ul.clean li span.bullet {
+      font-size: 1rem;
+      line-height: 1.1;
+      margin-top: 1px;
+    }
+
+    .steps {
+      list-style: none;
+    }
+
+    .steps li {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .steps-number {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      color: #e5e7eb;
+    }
+
+    /* AUTOAJUDA */
+    .autoajuda-box {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .autoajuda-box {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 197, 94, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #bbf7d0;
+    }
+
+    .warning-box {
+      margin-top: 16px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(248, 113, 113, 0.8);
+      background: rgba(24, 24, 27, 0.9);
+      font-size: 0.8rem;
+      color: #fecaca;
+    }
+
+    /* LIVRO / MATERIAL */
+    .book-wrapper {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .book-wrapper {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .book-cover {
+      border-radius: 22px;
+      padding: 14px;
+      background: radial-gradient(circle at top, rgba(99, 102, 241, 0.45), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .book-cover-inner {
+      border-radius: 18px;
+      padding: 18px;
+      background: conic-gradient(from 160deg, #020617, #111827, #1f2937, #111827, #020617);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 26px;
+      height: 100%;
+    }
+
+    .book-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .book-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 260px;
+    }
+
+    .book-tag {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      color: var(--muted);
+    }
+
+    .book-quote {
+      font-size: 0.86rem;
+      color: #e5e7eb;
+      border-left: 3px solid rgba(156, 163, 175, 0.7);
+      padding-left: 12px;
+    }
+
+    .book-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .badge-soft {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.78rem;
+      color: #cbd5f5;
+    }
+
+    /* TESTE RÁPIDO */
+    .test-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .test-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .test-list {
+      list-style: none;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .test-list li {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .test-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+    }
+
+    .test-result {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 72px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer span.quote {
+      color: #e5e7eb;
+    }
+
+    footer span.tag {
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+  </style>
 </head>
 <body>
-    <header id="header">
-        <div class="container nav-container">
-            <a href="#" class="logo">Burn<span>Out</span></a>
-            <button class="mobile-menu-btn" id="mobile-menu-button">
-                <i class="fas fa-bars"></i>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-logo"></div>
+        <div>
+          <div class="brand-title">UNOPSICOBURNO</div>
+          <div style="font-size: 0.7rem; color: var(--muted);">Burnout • Psicologia & Autocuidado</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#sobre">O que é</a>
+        <a href="#sintomas">Sintomas</a>
+        <a href="#autoajuda">Autoajuda</a>
+        <a href="#livro">Livro</a>
+        <a href="#recursos">Recursos</a>
+      </nav>
+      <button class="nav-cta" onclick="document.getElementById('autoajuda').scrollIntoView({behavior:'smooth'})">
+        <span class="icon">🧠</span>
+        <span>Primeiros socorros emocionais</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- HERO -->
+    <section id="topo">
+      <div class="hero">
+        <div>
+          <div class="hero-tagline">
+            <span class="hero-tagline-badge">Burnout</span>
+            Quando o corpo grita o que a mente não aguenta mais.
+          </div>
+          <h1 class="hero-title">
+            Burnout não é frescura.
+            <span>É seu sistema pedindo socorro.</span>
+          </h1>
+          <p class="hero-sub">
+            Exaustão, culpa por “não render”, sensação de estar sempre atrasado(a) e um vazio que não passa.
+            Este espaço foi criado para você entender o que está acontecendo, se cuidar e reorganizar sua vida mental.
+          </p>
+          <div class="hero-cta-row">
+            <button
+              class="btn-primary"
+              onclick="document.getElementById('teste').scrollIntoView({behavior:'smooth'})"
+            >
+              <span>Fazer um auto-check rápido</span> <span>➜</span>
             </button>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#oque-e">O que é</a></li>
-                <li><a href="#sintomas">Sintomas</a></li>
-                <li><a href="#causas">Causas</a></li>
-                <li><a href="#prevencao">Prevenção</a></li>
-                <li><a href="#recuperacao">Recuperação</a></li>
-                <li><a href="#recursos">Recursos</a></li>
+            <button
+              class="btn-ghost"
+              onclick="document.getElementById('livro').scrollIntoView({behavior:'smooth'})"
+            >
+              <span>Explorar guia em formato de livro</span>
+            </button>
+          </div>
+          <p class="hero-note">
+            <strong>Atenção:</strong> este site não substitui acompanhamento psicológico ou psiquiátrico.
+            Ele é um mapa para te ajudar a entender, nomear e buscar apoio.
+          </p>
+        </div>
+
+        <aside class="hero-visual">
+          <div class="hero-visual-orbit"></div>
+          <div class="hero-visual-img">
+            <img
+              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80"
+              alt="Pessoa em ambiente de trabalho com expressão de cansaço e sobrecarga"
+            />
+          </div>
+          <div class="hero-stat">
+            <span class="value">76%</span>
+            <span class="label">
+              das pessoas já relataram se sentir emocionalmente exaustas pelo trabalho em algum momento.
+            </span>
+          </div>
+          <div class="hero-pill">
+            <span class="hero-pill-dot"></span>
+            <span>Saúde mental é prioridade, não luxo.</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- O QUE É -->
+    <section id="sobre">
+      <div class="section-label">
+        <span class="section-label-dot"></span>
+        <span>Compreender antes de se cobrar</span>
+      </div>
+      <h2 class="section-title">O que é Burnout?</h2>
+      <p class="section-subtitle">
+        Burnout é uma síndrome de esgotamento físico e emocional ligada principalmente ao trabalho.
+        Você não “virou preguiçoso(a)”. Seu sistema nervoso está sobrecarregado há tempo demais.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-soft">
+          <div class="card-label">Em palavras simples</div>
+          <div class="card-title">Quando viver vira “apenas sobreviver”.</div>
+          <div class="card-body">
+            Burnout aparece quando você passa tanto tempo em modo de alerta que o corpo deixa de
+            conseguir descansar de verdade. A mente vive em estado de “se eu parar, tudo desmorona”.
+            <br /><br />
+            É marcado por:
+            <ul class="clean" style="margin-top: 8px;">
+              <li><span class="bullet">•</span> Exaustão profunda que não melhora só com dormir.</li>
+              <li><span class="bullet">•</span> Perda de sentido no trabalho e na vida diária.</li>
+              <li><span class="bullet">•</span> Irritação, cinismo, vontade de fugir de tudo.</li>
+              <li><span class="bullet">•</span> Corpo gritando: dores, insônia, taquicardia, tensão.</li>
             </ul>
+          </div>
         </div>
-    </header>
 
-    <div class="floating-elements">
-        <div class="floating-circle"></div>
-        <div class="floating-circle"></div>
-        <div class="floating-circle"></div>
+        <div class="card">
+          <div class="pill pill-danger">Importante</div>
+          <div class="card-title" style="margin-top: 8px;">Burnout não é fraqueza, é limite.</div>
+          <p class="card-body">
+            Você não falhou. Pelo contrário: manteve tudo em pé por tanto tempo, que seu organismo
+            precisou acionar o “freio de emergência”. A partir daqui, a pergunta deixa de ser
+            “como eu produzo mais?” e passa a ser “como eu posso existir de um jeito mais humano?”.
+          </p>
+          <p class="mini-tag">
+            Se você sente que está “quebrado(a)”, talvez esteja apenas <strong>cansado(a) demais de ser forte o tempo todo.</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SINTOMAS -->
+    <section id="sintomas">
+      <div class="section-label">
+        <span class="section-label-dot"></span>
+        <span>Reconhecer para poder cuidar</span>
+      </div>
+      <h2 class="section-title">Sintomas comuns de Burnout</h2>
+      <p class="section-subtitle">
+        Não é só “cansaço”. Burnout mistura sintomas físicos, emocionais e comportamentais. Se você se
+        identificar com vários itens, considere buscar ajuda profissional.
+      </p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-label">Corpo</div>
+          <div class="card-title">Exaustão física</div>
+          <p class="card-body">
+            Cansaço constante, sensação de peso no corpo, dores musculares, tensão no pescoço, dores de cabeça,
+            distúrbios digestivos, queda de imunidade.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Emoções</div>
+          <div class="card-title">Vazio e irritação</div>
+          <p class="card-body">
+            Falta de prazer nas coisas que antes eram boas, irritabilidade, explosões emocionais,
+            vontade de se isolar, sensação de “estar no automático”.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Pensamentos</div>
+          <div class="card-title">Autocrítica cruel</div>
+          <p class="card-body">
+            Pensamentos de inadequação, sensação de incompetência, dificuldade de concentração,
+            mente acelerada, preocupação constante com desempenho.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Comportamento</div>
+          <div class="card-title">Desconexão</div>
+          <p class="card-body">
+            Afastamento de pessoas, perda de interesse por hobbies, procrastinação extrema ou
+            hiperfoco produtivo por medo de “falhar”.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Trabalho</div>
+          <div class="card-title">Cinismo e desmotivação</div>
+          <p class="card-body">
+            Senso de injustiça, raiva do trabalho ou da empresa, vontade de largar tudo,
+            sensação de que nada muda, por mais que você se esforce.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Risco</div>
+          <div class="card-title">Sinais de alerta máximo</div>
+          <p class="card-body">
+            Uso de álcool ou outras substâncias para “aguentar”, pensamentos de que “seria melhor sumir”,
+            ideação suicida. Nesses casos, procure ajuda imediatamente.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTOAJUDA -->
+    <section id="autoajuda">
+      <div class="section-label">
+        <span class="section-label-dot"></span>
+        <span>Autoajuda na prática</span>
+      </div>
+      <h2 class="section-title">“Primeiros socorros emocionais” para momentos de colapso</h2>
+      <p class="section-subtitle">
+        Isso não substitui terapia, mas pode te ajudar a atravessar o agora. Pense como um kit de emergências
+        para quando você estiver no limite.
+      </p>
+
+      <div class="autoajuda-box">
+        <div class="card-soft">
+          <div class="card-label">Passo a passo</div>
+          <div class="card-title">1. Aterrissagem: voltar para o corpo</div>
+          <ul class="steps" style="margin-top: 8px;">
+            <li>
+              <div class="steps-number">1</div>
+              <div>
+                <strong>Respire 4–6–8.</strong> Inspire contando até 4, segure o ar contando até 6,
+                solte devagar contando até 8. Repita de 5 a 10 vezes.
+              </div>
+            </li>
+            <li>
+              <div class="steps-number">2</div>
+              <div>
+                <strong>Exercício 5–4–3–2–1.</strong> Nomeie mentalmente: 5 coisas que vê, 4 que pode tocar,
+                3 que escuta, 2 que pode cheirar, 1 que pode saborear. Isso ajuda a reduzir a sensação de “desligamento”.
+              </div>
+            </li>
+            <li>
+              <div class="steps-number">3</div>
+              <div>
+                <strong>Relaxe a postura.</strong> Solte os ombros, descruze as pernas, descrave os dentes,
+                alongue o pescoço. Sair da “postura de guerra” já é um começo.
+              </div>
+            </li>
+          </ul>
+
+          <div class="card-title" style="margin-top: 18px;">2. Conversa honesta consigo mesmo(a)</div>
+          <ul class="clean" style="margin-top: 8px;">
+            <li>
+              <span class="bullet">•</span>
+              Pergunte: <em>“O que exatamente está doendo em mim agora?”</em> (não “o que a empresa exige”, mas o que você sente).
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              Troque o “eu tenho que dar conta de tudo” por “eu posso escolher quais batalhas lutar hoje”.
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              Permita-se respostas pequenas: “hoje eu só consigo fazer o mínimo viável — e isso é humano”.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Checklist rápido</div>
+          <div class="card-title">Coisas pequenas que mudam o seu dia</div>
+          <div style="margin-top: 8px;">
+            <div class="checklist-item">
+              <div class="check-icon">✓</div>
+              <div>Beber um copo grande de água, sem celular por 2 minutos.</div>
+            </div>
+            <div class="checklist-item">
+              <div class="check-icon">✓</div>
+              <div>Levantar, abrir uma janela e olhar o horizonte por 30 segundos.</div>
+            </div>
+            <div class="checklist-item">
+              <div class="check-icon">✓</div>
+              <div>Enviar uma mensagem sincera pedindo ajuda ou dizendo “hoje não estou bem”.</div>
+            </div>
+            <div class="checklist-item">
+              <div class="check-icon">✓</div>
+              <div>Anotar em um papel: “Hoje eu vou ser <strong>gentil</strong> comigo mesmo(a) em pelo menos 1 coisa”.</div>
+            </div>
+          </div>
+
+          <div class="warning-box">
+            Se você sente vontade de machucar a si mesmo(a), ou pensa em desistir de tudo, busque ajuda imediata.
+            No Brasil, o <strong>CVV (188)</strong> atende 24h, gratuitamente. Pedir ajuda é um ato de coragem.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVRO / GUIA -->
+    <section id="livro">
+      <div class="section-label">
+        <span class="section-label-dot"></span>
+        <span>Material em formato de livro</span>
+      </div>
+      <h2 class="section-title">Guia psicológico “UNOPSICOBURNO — Quando a mente pede pausa”</h2>
+      <p class="section-subtitle">
+        Imagine um pequeno livro digital para reler nos dias difíceis. Não é mais uma cobrança de produtividade,
+        mas um convite a reorganizar a forma como você se enxerga no mundo.
+      </p>
+
+      <div class="book-wrapper">
+        <div class="book-cover">
+          <div class="book-cover-inner">
+            <div>
+              <div class="book-tag">Guia psicológico • Autoajuda realista</div>
+              <h3 class="book-title" style="margin-top: 14px;">UNOPSICOBURNO</h3>
+              <p class="book-sub">
+                Um percurso em 4 capítulos: entender, nomear, cuidar e reconstruir. Sem frases vazias,
+                com profundidade emocional e linguagem humana.
+              </p>
+            </div>
+            <div>
+              <p class="book-quote">
+                “Você não é um robô que deu defeito. Você é um ser humano que foi exigido além dos próprios limites.
+                A cura começa quando a culpa vai embora e dá lugar à compaixão.”
+              </p>
+            </div>
+            <div class="book-cta">
+              <span class="badge-soft">PDF • Leitura guiada</span>
+              <span class="badge-soft">Exercícios de reflexão</span>
+              <span class="badge-soft">Perguntas para sessão de terapia</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-soft">
+          <div class="card-label">Conteúdo sugerido</div>
+          <div class="card-title">O que este livro pode trazer para você</div>
+          <ul class="clean" style="margin-top: 8px;">
+            <li>
+              <span class="bullet">•</span>
+              <strong>Capítulo 1 — Nomear a dor.</strong> Histórias e metáforas para entender o que é burnout
+              sem se sentir “errado(a)”.
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <strong>Capítulo 2 — Corpo em alerta.</strong> Como o sistema nervoso funciona, por que é tão difícil desligar,
+              e formas de aliviar a sobrecarga.
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <strong>Capítulo 3 — Limites que protegem.</strong> Como dizer “não”, renegociar prazos e criar acordos mais humanos.
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <strong>Capítulo 4 — Reconstruir a própria história.</strong> Caminhos para recuperar autoestima, prazer e sentido.
+            </li>
+          </ul>
+          <p class="mini-tag">
+            Você pode usar esta estrutura para criar um e-book próprio, material de atendimento ou projeto acadêmico.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTE RÁPIDO -->
+    <section id="teste">
+      <div class="section-label">
+        <span class="section-label-dot"></span>
+        <span>Auto-check de burnout</span>
+      </div>
+      <h2 class="section-title">Checklist rápido: como anda sua bateria emocional?</h2>
+      <p class="section-subtitle">
+        Não é um diagnóstico, mas um ponto de partida. Leia com sinceridade, sem se julgar. Marque mentalmente
+        quantos “sim” aparecem.
+      </p>
+
+      <div class="test-grid">
+        <div class="card-soft">
+          <ul class="test-list">
+            <li>
+              <div class="test-dot">1</div>
+              <div>Você acorda mais cansado(a) do que quando foi dormir?</div>
+            </li>
+            <li>
+              <div class="test-dot">2</div>
+              <div>Coisas simples parecem montanhas impossíveis de subir?</div>
+            </li>
+            <li>
+              <div class="test-dot">3</div>
+              <div>
+                Você sente culpa quando descansa, como se estivesse “devendo” produtividade o tempo todo?
+              </div>
+            </li>
+            <li>
+              <div class="test-dot">4</div>
+              <div>
+                Já pensou que “se eu sumisse por alguns dias, talvez tudo ficasse mais fácil”?
+              </div>
+            </li>
+            <li>
+              <div class="test-dot">5</div>
+              <div>
+                Sua memória, foco ou concentração parecem muito piores do que antes?
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Como interpretar isso?</div>
+          <p class="test-result">
+            • <strong>1–2 “sim”</strong>: seu corpo está te pedindo mais pausas e descanso real.<br />
+            • <strong>3–4 “sim”</strong>: sinais importantes de sobrecarga. Reorganizar rotina e buscar apoio pode ser essencial.<br />
+            • <strong>5 “sim”</strong>: considere com carinho procurar um(a) psicólogo(a) ou psiquiatra. Você não precisa passar por isso sozinho(a).
+          </p>
+          <p class="mini-tag" style="margin-top: 12px;">
+            Em qualquer cenário, cuidar da saúde mental é um investimento em toda a sua história de vida.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECURSOS -->
+    <section id="recursos">
+      <div class="section-label">
+        <span class="section-label-dot"></span>
+        <span>Onde buscar ajuda</span>
+      </div>
+      <h2 class="section-title">Recursos e apoio psicológico</h2>
+      <p class="section-subtitle">
+        Burnout é sério, mas não precisa ser enfrentado sozinho. Há profissionais, serviços e ferramentas
+        que podem caminhar com você.
+      </p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-label">Apoio imediato</div>
+          <div class="card-title">CVV — Centro de Valorização da Vida</div>
+          <p class="card-body">
+            Telefone <strong>188</strong> (24h, gratuito) • Chat e e-mail em
+            <a href="https://www.cvv.org.br" target="_blank" rel="noreferrer">cvv.org.br</a>.
+            <br />Para momentos de crise, pensamentos suicidas ou quando você sente que não aguenta mais.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Atendimento público</div>
+          <div class="card-title">SUS — Caps e unidades de saúde</div>
+          <p class="card-body">
+            Procure os <strong>Centros de Atenção Psicossocial (Caps)</strong> da sua cidade ou postos de saúde.
+            Informe que está em sofrimento emocional intenso e peça orientação.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Online</div>
+          <div class="card-title">Plataformas de terapia</div>
+          <p class="card-body">
+            Serviços de terapia online, planos de saúde e atendimentos sociais em clínicas-escola podem
+            reduzir custos e facilitar o acesso. Buscar ajuda é um gesto de cuidado, não de fraqueza.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="livros-extra">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Leituras recomendadas</span>
+  </div>
+
+  <h2 class="section-title">Livros que ajudam na jornada emocional</h2>
+  <p class="section-subtitle">
+    Seleção de obras que auxiliam no entendimento da mente humana,
+    autoconhecimento, ansiedade e burnout.
+  </p>
+
+  <div class="grid-3" style="margin-top: 32px;">
+
+    <div class="card">
+      <img src="https://m.media-amazon.com/images/I/71SfIe1eCFL._AC_UF1000,1000_QL80_.jpg"
+           style="height: 220px; object-fit: cover; margin-bottom: 12px;">
+      <div class="card-title">O Corpo Fala</div>
+      <p class="card-body">Como emoções reprimidas viram sinais físicos.</p>
     </div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>BURNOUT</h1>
-            <p>Quando o trabalho consome mais do que você pode dar</p>
-            <a href="#sintomas" class="cta-button">Entenda os Sintomas</a>
-            <a href="#prevencao" class="cta-button">Como Prevenir</a>
-        </div>
-    </section>
-
-    <section id="oque-e" class="section section-dark">
-        <div class="burnout-visual">
-            <img src="images/IMG-20250821-WA0062.jpg" alt="Representação visual do tempo e pressão no burnout">
-        </div>
-        <div class="container">
-            <h2>O que é Burnout?</h2>
-            <p class="section-subtitle">A síndrome do esgotamento profissional que afeta milhões de pessoas em todo o mundo</p>
-            
-            <div class="cards-grid">
-                <div class="card fade-in">
-                    <span class="card-icon">🔥</span>
-                    <h3>Esgotamento</h3>
-                    <p>Síndrome do esgotamento profissional caracterizada pelo cansaço extremo e estresse relacionado ao trabalho. Reconhecida pela OMS como fenômeno ocupacional.</p>
-                </div>
-                <div class="card fade-in">
-                    <span class="card-icon">🧠</span>
-                    <h3>Impacto Mental</h3>
-                    <p>Afeta a saúde mental, causando exaustão emocional, despersonalização e redução da realização pessoal. Pode levar a depressão e ansiedade.</p>
-                </div>
-                <div class="card fade-in">
-                    <span class="card-icon">📈</span>
-                    <h3>Crescimento Alarmante</h3>
-                    <p>Casos de burnout aumentaram drasticamente, especialmente após a pandemia e mudanças no trabalho. Um fenômeno global em ascensão.</p>
-                </div>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-item fade-in">
-                    <span class="stat-number">76%</span>
-                    <p>dos profissionais relatam sintomas de burnout</p>
-                </div>
-                <div class="stat-item fade-in">
-                    <span class="stat-number">40%</span>
-                    <p>consideram mudar de emprego por estresse</p>
-                </div>
-                <div class="stat-item fade-in">
-                    <span class="stat-number">3x</span>
-                    <p>maior risco de doenças cardiovasculares</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="sintomas" class="section symptoms-section">
-        <div class="symptoms-bg">
-            <img src="images/IMG-20250821-WA0064.jpg" alt="Representação da sobrecarga mental">
-        </div>
-        <div class="container">
-            <h2>Sintomas do Burnout</h2>
-            <p class="section-subtitle">Reconhecer os sinais é o primeiro passo para a recuperação</p>
-            
-            <div class="symptoms-grid">
-                <div class="symptom-item fade-in">
-                    <strong>Exaustão Física</strong><br>
-                    Cansaço constante, mesmo após descanso
-                </div>
-                <div class="symptom-item fade-in">
-                    <strong>Esgotamento Emocional</strong><br>
-                    Sentimentos de vazio e desânimo
-                </div>
-                <div class="symptom-item fade-in">
-                    <strong>Irritabilidade</strong><br>
-                    Baixa tolerância e conflitos frequentes
-                </div>
-                <div class="symptom-item fade-in">
-                    <strong>Dificuldade de Concentração</strong><br>
-                    Problemas de foco e memória
-                </div>
-                <div class="symptom-item fade-in">
-                    <strong>Isolamento Social</strong><br>
-                    Afastamento de colegas e atividades
-                </div>
-                <div class="symptom-item fade-in">
-                    <strong>Sintomas Físicos</strong><br>
-                    Dores de cabeça, insônia, problemas digestivos
-                </div>
-                <div class="symptom-item fade-in">
-                    <strong>Despersonalização</strong><br>
-                    Distanciamento emocional do trabalho
-                </div>
-                <div class="symptom-item fade-in">
-                    <strong>Baixa Autoestima</strong><br>
-                    Sentimentos de incompetência
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="causas" class="section causes-section">
-        <div class="container">
-            <h2>Principais Causas do Burnout</h2>
-            <p class="section-subtitle">Fatores que contribuem para o desenvolvimento da síndrome</p>
-            
-            <div class="causes-list">
-                <div class="cause-item fade-in">
-                    <h3>Carga Excessiva de Trabalho</h3>
-                    <p>Horários prolongados, prazos irreais e volume excessivo de tarefas sem tempo adequado para recuperação.</p>
-                </div>
-                <div class="cause-item fade-in">
-                    <h3>Falta de Controle</h3>
-                    <p>Pouca autonomia sobre o trabalho, recursos insuficientes ou incapacidade de influenciar decisões.</p>
-                </div>
-                <div class="cause-item fade-in">
-                    <h3>Recompensa Inadequada</h3>
-                    <p>Salário incompatível com as responsabilidades, falta de reconhecimento ou segurança no emprego.</p>
-                </div>
-                <div class="cause-item fade-in">
-                    <h3>Falta de Equidade</h3>
-                    <p>Tratamento injusto, favoritismo ou políticas inadequadas no ambiente de trabalho.</p>
-                </div>
-                <div class="cause-item fade-in">
-                    <h3>Conflito de Valores</h3>
-                    <p>Divergência entre os valores pessoais e os demandados pelo trabalho ou organização.</p>
-                </div>
-                <div class="cause-item fade-in">
-                    <h3>Pressão Constante</h3>
-                    <p>Ambiente de alta pressão com expectativas irreais e medo constante de falhar.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section section-pink">
-        <div class="container">
-            <h2>Reflexões sobre Bem-estar Mental</h2>
-            <p class="section-subtitle">Mensagens inspiradoras para momentos de dificuldade</p>
-            
-            <div class="inspirational-section">
-                <div class="inspiration-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0060.jpg')">
-                    <div class="inspiration-image">
-                        <img src="images/IMG-20250821-WA0060.jpg" alt="Eu escolho não me estressar com as coisas que não posso controlar">
-                    </div>
-                    <p class="quote-text">"Eu escolho não me estressar com as coisas que não posso controlar."</p>
-                </div>
-                
-                <div class="inspiration-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0061.jpg')">
-                    <div class="inspiration-image">
-                        <img src="images/IMG-20250821-WA0061.jpg" alt="Isso também vai passar">
-                    </div>
-                    <p class="quote-text">"Isso também vai passar."</p>
-                </div>
-                
-                <div class="inspiration-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0063.jpg')">
-                    <div class="inspiration-image">
-                        <img src="images/IMG-20250821-WA0063.jpg" alt="Uma hora você aprende que nem tudo que a vida te dá é seu para carregar">
-                    </div>
-                    <p class="quote-text">"Uma hora você aprende que nem tudo que a vida te dá é seu para carregar."</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="messages-section">
-        <div class="container">
-            <h2>Mensagens Inspiracionais</h2>
-            <p class="section-subtitle">Reflexões poderosas para sua jornada de autocuidado</p>
-            
-            <div class="messages-grid">
-                <div class="message-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0065.jpg')">
-                    <div class="message-image">
-                        <img src="images/IMG-20250821-WA0065.jpg" alt="Desacelerar é uma questão de importância ética">
-                    </div>
-                    <div class="message-content">
-                        <p class="message-text">"Desacelerar é uma questão de importância ética. Dirigir-se como se fosse uma máquina deve ser reconhecido como uma forma de automutilação." - Maggie Berg</p>
-                    </div>
-                </div>
-                
-                <div class="message-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0066.jpg')">
-                    <div class="message-image">
-                        <img src="images/IMG-20250821-WA0066.jpg" alt="Julgar-se por se sentir ansioso é como bater em alguém caído">
-                    </div>
-                    <div class="message-content">
-                        <p class="message-text">"Julgar-se por se sentir ansioso(a) é como bater em alguém caído para que se levante."</p>
-                    </div>
-                </div>
-                
-                <div class="message-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0067.jpg')">
-                    <div class="message-image">
-                        <img src="images/IMG-20250821-WA0067.jpg" alt="Você não precisa ficar desconfortável para deixar todo mundo confortável">
-                    </div>
-                    <div class="message-content">
-                        <p class="message-text">"Você não precisa ficar desconfortável para deixar todo mundo confortável."</p>
-                    </div>
-                </div>
-                
-                <div class="message-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0068.jpg')">
-                    <div class="message-image">
-                        <img src="images/IMG-20250821-WA0068.jpg" alt="Observe: o que exatamente você gostaria que fosse diferente?">
-                    </div>
-                    <div class="message-content">
-                        <p class="message-text">"Observe: o que exatamente você gostaria que fosse diferente? Quanto mais específica for sua resposta, melhor."</p>
-                    </div>
-                </div>
-                
-                <div class="message-card fade-in" onclick="openLightbox('images/IMG-20250821-WA0069.jpg')">
-                    <div class="message-image">
-                        <img src="images/IMG-20250821-WA0069.jpg" alt="Você não sabe a coragem que eu precisei para soltar o medo de desagradar">
-                    </div>
-                    <div class="message-content">
-                        <p class="message-text">"Você não sabe a coragem que eu precisei para soltar o medo de desagradar."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="prevencao" class="section section-dark">
-        <div class="prevention-visual">
-            <img src="images/IMG-20250821-WA0059.jpg" alt="Representação de autocuidado e reflexão">
-        </div>
-        <div class="container">
-            <h2>Como Prevenir o Burnout</h2>
-            <p class="section-subtitle">Estratégias práticas para manter o equilíbrio e bem-estar</p>
-            
-            <div class="prevention-tips">
-                <div class="tip-card fade-in">
-                    <h3>🎯 Estabeleça Limites</h3>
-                    <p>Defina horários claros de trabalho e respeite seus momentos de descanso. Aprenda a dizer "não" quando necessário.</p>
-                </div>
-                <div class="tip-card fade-in">
-                    <h3>⚖️ Balance Vida-Trabalho</h3>
-                    <p>Dedique tempo para hobbies, família e atividades que trazem prazer e relaxamento.</p>
-                </div>
-                <div class="tip-card fade-in">
-                    <h3>🧘 Pratique Mindfulness</h3>
-                    <p>Técnicas de meditação e respiração ajudam a reduzir o estresse e aumentar a consciência corporal.</p>
-                </div>
-                <div class="tip-card fade-in">
-                    <h3>🏃 Exercite-se Regularmente</h3>
-                    <p>Atividade física libera endorfinas e ajuda a combater o estresse e a ansiedade.</p>
-                </div>
-                <div class="tip-card fade-in">
-                    <h3>💬 Busque Apoio</h3>
-                    <p>Converse com amigos, família ou profissionais. Não hesite em procurar ajuda psicológica.</p>
-                </div>
-                <div class="tip-card fade-in">
-                    <h3>😴 Priorize o Sono</h3>
-                    <p>Mantenha uma rotina de sono saudável, com 7-8 horas por noite em ambiente adequado.</p>
-                </div>
-                <div class="tip-card fade-in">
-                    <h3>📝 Organize suas Tarefas</h3>
-                    <p>Use técnicas de gestão de tempo como Pomodoro ou matriz de Eisenhower para priorizar.</p>
-                </div>
-                <div class="tip-card fade-in">
-                    <h3>🌳 Conecte-se com a Natureza</h3>
-                    <p>Passeios ao ar livre e contato com a natureza reduzem significativamente o estresse.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="recuperacao" class="section section-light">
-        <div class="container">
-            <h2>Caminhos para a Recuperação</h2>
-            <p class="section-subtitle">Passos importantes para superar o burnout e restaurar o equilíbrio</p>
-            
-            <div class="recovery-steps">
-                <div class="recovery-step fade-in">
-                    <span class="step-number">1</span>
-                    <h3>Reconhecimento</h3>
-                    <p>Admitir que está enfrentando burnout é o primeiro e mais crucial passo para a recuperação.</p>
-                </div>
-                <div class="recovery-step fade-in">
-                    <span class="step-number">2</span>
-                    <h3>Desaceleração</h3>
-                    <p>Reduza compromissos e permita-se tempo para descansar e se recuperar verdadeiramente.</p>
-                </div>
-                <div class="recovery-step fade-in">
-                    <span class="step-number">3</span>
-                    <h3>Apoio Profissional</h3>
-                    <p>Busque ajuda de psicólogos ou terapeutas especializados em saúde ocupacional.</p>
-                </div>
-                <div class="recovery-step fade-in">
-                    <span class="step-number">4</span>
-                    <h3>Reavaliação de Prioridades</h3>
-                    <p>Reflita sobre o que realmente importa e ajuste seu estilo de vida de acordo.</p>
-                </div>
-                <div class="recovery-step fade-in">
-                    <span class="step-number">5</span>
-                    <h3>Estabelecer Novos Hábitos</h3>
-                    <p>Incorpore práticas regulares de autocuidado e limites saudáveis no trabalho.</p>
-                </div>
-                <div class="recovery-step fade-in">
-                    <span class="step-number">6</span>
-                    <h3>Reintegração Gradual</h3>
-                    <p>Retorne às atividades profissionais de forma progressiva, com ajustes necessários.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <h2>Quando Buscar Ajuda</h2>
-            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                <p style="font-size: 1.3rem; margin-bottom: 2rem; color: #666;">
-                    Se você se identifica com vários sintomas de burnout, é importante procurar ajuda profissional. 
-                    O apoio psicológico pode fazer toda a diferença na sua recuperação.
-                </p>
-                
-                <div style="background: #1a1a1a; padding: 3rem; border-radius: 20px; color: white; margin: 2rem 0; border: 3px solid #f4c2c2;" class="fade-in">
-                    <h3 style="margin-bottom: 1rem; color: #f4c2c2;">🆘 Sinais de Alerta</h3>
-                    <p>Pensamentos negativos persistentes • Isolamento extremo • Sintomas físicos graves • Uso de substâncias para lidar com o estresse • Ideação suicida</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer id="recursos" class="footer">
-        <div class="container">
-            <h3>Recursos e Apoio</h3>
-            <p>Se você está passando por burnout, saiba que não está sozinho. Existem recursos disponíveis para ajudar.</p>
-            
-            <div class="resources-list">
-                <div class="resource-item">
-                    <strong>CVV - Centro de Valorização da Vida</strong><br>
-                    188 (24h, gratuito) • www.cvv.org.br
-                </div>
-                <div class="resource-item">
-                    <strong>Terapia Online</strong><br>
-                    Plataformas como Zenklub, Vittude, Psicologia Viva
-                </div>
-                <div class="resource-item">
-                    <strong>SUS - Caps</strong><br>
-                    Centros de Atenção Psicossocial
-                </div>
-                <div class="resource-item">
-                    <strong>Apps de Bem-estar</strong><br>
-                    Headspace, Calm, Lojong, Queramente
-                </div>
-                <div class="resource-item">
-                    <strong>Livros Recomendados</strong><br>
-                    "Esgotamento" - Emily Nagoski • "A Revolução do Autocuidado" - Suzy Reading
-                </div>
-                <div class="resource-item">
-                    <strong>Testes Online</strong><br>
-                    Questionários de autoavaliação de burnout (Maslach Burnout Inventory)
-                </div>
-            </div>
-
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-            </div>
-
-            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #333;">
-                <p><strong>Projeto desenvolvido para fins educacionais</strong></p>
-                <p>Psicologia • Engenharia da Computação</p>
-                <p style="margin-top: 1rem; opacity: 0.7;">"O cuidado com a saúde mental não é luxo, é necessidade."</p>
-            </div>
-        </div>
-    </footer>
-
-    <a href="#" class="back-to-top" id="back-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-        <div class="lightbox-content">
-            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-            <img class="lightbox-image" id="lightbox-image" src="" alt="">
-        </div>
+    <div class="card">
+      <img src="https://m.media-amazon.com/images/I/71Wy+qN7BjL._AC_UF1000,1000_QL80_.jpg"
+           style="height: 220px; object-fit: cover; margin-bottom: 12px;">
+      <div class="card-title">A Coragem de Ser Imperfeito</div>
+      <p class="card-body">Reflexões sobre vulnerabilidade e autocuidado.</p>
     </div>
 
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    
-                    // Close mobile menu if open
-                    if (navMenu.classList.contains('active')) {
-                        toggleMobileMenu();
-                    }
-                }
-            });
-        });
+    <div class="card">
+      <img src="https://m.media-amazon.com/images/I/81kqrwS1nNL._AC_UF1000,1000_QL80_.jpg"
+           style="height: 220px; object-fit: cover; margin-bottom: 12px;">
+      <div class="card-title">O Milagre da Manhã</div>
+      <p class="card-body">Hábitos simples que reduzem ansiedade.</p>
+    </div>
 
-        // Mobile menu functionality
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const navMenu = document.getElementById('nav-menu');
-        
-        function toggleMobileMenu() {
-            navMenu.classList.toggle('active');
-            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : 'auto';
-        }
-        
-        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+  </div>
+</section>
+    <footer>
+  <div style="display: flex; flex-direction: column; gap: 6px;">
+    <span class="quote">“O cuidado com a saúde mental não é luxo, é necessidade.”</span>
 
-        // Header scroll effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+    <span style="font-size: 0.75rem; color: #9ca3af;">
+      Pesquisa desenvolvida por estudantes da <strong>Unochapecó</strong>.
+    </span>
 
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Unochapec%C3%B3_-_Marca.png/640px-Unochapec%C3%B3_-_Marca.png"
+         alt="Logo Unochapecó"
+         style="width: 120px; opacity: 0.75; margin-top: 6px;">
+  </div>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+  <span class="tag">Psicologia & Autocuidado • Burnout</span>
 
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
+  <span style="font-size: 0.68rem; opacity: 0.5; margin-top: 8px;">
+    Created by <strong>Ricardo</strong>
+  </span>
+</footer>
+  </main>
 
-        // Back to top button
-        const backToTopButton = document.getElementById('back-to-top');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                backToTopButton.classList.add('visible');
-            } else {
-                backToTopButton.classList.remove('visible');
-            }
-        });
-
-        // Lightbox functionality
-        function openLightbox(imageSrc) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
-            lightboxImage.src = imageSrc;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close lightbox with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            }
-        });
-
-        // Prevent lightbox from closing when clicking on the image
-        document.querySelector('.lightbox-content').addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-
-        // Parallax effect for hero section
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-            }
-        });
-
-        // Add loading animation
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '1';
-        });
-
-        // Interactive self-assessment quiz (simplified)
-        function startAssessment() {
-            alert('Em desenvolvimento: Questionário de autoavaliação de burnout com pontuação e recomendações personalizadas.');
-        }
-    </script>
+  <script>
+    // Pequeno efeito: ao rolar, adiciona sombra mais forte na navbar
+    document.addEventListener("scroll", () => {
+      const nav = document.querySelector(".navbar");
+      if (window.scrollY > 10) {
+        nav.style.boxShadow = "0 12px 30px rgba(15, 23, 42, 0.9)";
+      } else {
+        nav.style.boxShadow = "none";
+      }
+    });
+  </script>
 </body>
 </html>
