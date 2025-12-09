@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="Burnout: quando o corpo grita o que a mente não aguenta mais. Entenda os sinais, previna e cuide da sua saúde mental."
+    content="Burnout: quando o corpo grita o que a mente não suporta mais. Entenda os sinais, previna-se e cuide da sua saúde mental."
   />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --bg: #050816;
@@ -184,7 +185,6 @@
       font-size: 0.95rem;
       color: var(--muted);
     }
-
     /* HERO */
     .hero {
       margin-top: 32px;
@@ -399,37 +399,7 @@
     @media (max-width: 960px) {
       .hero,
       .grid-2 {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .hero-visual {
-        order: -1;
-      }
-
-      .grid-3 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .grid-4 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .nav-links {
-        display: none;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .grid-3,
-      .grid-4 {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      section {
-        margin-top: 56px;
-      }
-    }
-
+        grid-template-columns: minmax(0, 1fr
     /* CARDS */
     .card {
       background: var(--card-soft);
@@ -706,29 +676,6 @@
       font-size: 0.86rem;
       color: var(--muted);
     }
-
-    /* FOOTER */
-    footer {
-      margin-top: 72px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(148, 163, 184, 0.3);
-      font-size: 0.78rem;
-      color: var(--muted);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    footer span.quote {
-      color: #e5e7eb;
-    }
-
-    footer span.tag {
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
   </style>
 </head>
 <body>
@@ -739,9 +686,12 @@
         <div class="brand-logo"></div>
         <div>
           <div class="brand-title">UNOPSICOBURNO</div>
-          <div style="font-size: 0.7rem; color: var(--muted);">Burnout • Psicologia & Autocuidado</div>
+          <div style="font-size: 0.7rem; color: var(--muted);">
+            Burnout • Psicologia & Autocuidado
+          </div>
         </div>
       </div>
+
       <nav class="nav-links">
         <a href="#sobre">O que é</a>
         <a href="#sintomas">Sintomas</a>
@@ -749,7 +699,9 @@
         <a href="#livro">Livro</a>
         <a href="#recursos">Recursos</a>
       </nav>
-      <button class="nav-cta" onclick="document.getElementById('autoajuda').scrollIntoView({behavior:'smooth'})">
+
+      <button class="nav-cta"
+        onclick="document.getElementById('autoajuda').scrollIntoView({behavior:'smooth'})">
         <span class="icon">🧠</span>
         <span>Primeiros socorros emocionais</span>
       </button>
@@ -763,53 +715,59 @@
         <div>
           <div class="hero-tagline">
             <span class="hero-tagline-badge">Burnout</span>
-            Quando o corpo grita o que a mente não aguenta mais.
+            Quando o corpo começa a expressar o que a mente já não consegue sustentar.
           </div>
+
           <h1 class="hero-title">
             Burnout não é frescura.
-            <span>É seu sistema pedindo socorro.</span>
+            <span>É o seu sistema pedindo ajuda.</span>
           </h1>
+
           <p class="hero-sub">
-            Exaustão, culpa por “não render”, sensação de estar sempre atrasado(a) e um vazio que não passa.
-            Este espaço foi criado para você entender o que está acontecendo, se cuidar e reorganizar sua vida mental.
+            Exaustão, queda de energia, culpa por “não render”, sensação de estar sempre atrasado(a)
+            e um vazio que não desaparece.  
+            Este espaço foi criado para ajudar você a compreender o que está vivendo, reconhecer seus limites
+            e iniciar um caminho de cuidado emocional.
           </p>
+
           <div class="hero-cta-row">
-            <button
-              class="btn-primary"
-              onclick="document.getElementById('teste').scrollIntoView({behavior:'smooth'})"
-            >
+            <button class="btn-primary"
+              onclick="document.getElementById('teste').scrollIntoView({behavior:'smooth'})">
               <span>Fazer um auto-check rápido</span> <span>➜</span>
             </button>
-            <button
-              class="btn-ghost"
-              onclick="document.getElementById('livro').scrollIntoView({behavior:'smooth'})"
-            >
-              <span>Explorar guia em formato de livro</span>
+
+            <button class="btn-ghost"
+              onclick="document.getElementById('livro').scrollIntoView({behavior:'smooth'})">
+              <span>Explorar o guia em formato de livro</span>
             </button>
           </div>
+
           <p class="hero-note">
             <strong>Atenção:</strong> este site não substitui acompanhamento psicológico ou psiquiátrico.
-            Ele é um mapa para te ajudar a entender, nomear e buscar apoio.
+            Ele é um apoio inicial — um mapa para te ajudar a entender, nomear e buscar suporte.
           </p>
         </div>
 
         <aside class="hero-visual">
           <div class="hero-visual-orbit"></div>
+
           <div class="hero-visual-img">
             <img
               src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80"
-              alt="Pessoa em ambiente de trabalho com expressão de cansaço e sobrecarga"
+              alt="Pessoa exausta em ambiente de trabalho, simbolizando sobrecarga mental"
             />
           </div>
+
           <div class="hero-stat">
             <span class="value">76%</span>
             <span class="label">
-              das pessoas já relataram se sentir emocionalmente exaustas pelo trabalho em algum momento.
+              das pessoas já relataram sentir exaustão emocional devido ao trabalho.
             </span>
           </div>
+
           <div class="hero-pill">
             <span class="hero-pill-dot"></span>
-            <span>Saúde mental é prioridade, não luxo.</span>
+            <span>Saúde mental é prioridade.</span>
           </div>
         </aside>
       </div>
@@ -821,55 +779,72 @@
         <span class="section-label-dot"></span>
         <span>Compreender antes de se cobrar</span>
       </div>
+
       <h2 class="section-title">O que é Burnout?</h2>
+
       <p class="section-subtitle">
-        Burnout é uma síndrome de esgotamento físico e emocional ligada principalmente ao trabalho.
-        Você não “virou preguiçoso(a)”. Seu sistema nervoso está sobrecarregado há tempo demais.
+        Burnout é uma síndrome de esgotamento físico e emocional diretamente ligada ao excesso de demandas,
+        pressões e responsabilidades — especialmente profissionais.  
+        Você não está “fraco(a)” nem “desmotivado(a)”: seu organismo está em sobrecarga há tempo demais.
       </p>
 
       <div class="grid-2">
         <div class="card-soft">
           <div class="card-label">Em palavras simples</div>
+
           <div class="card-title">Quando viver vira “apenas sobreviver”.</div>
+
           <div class="card-body">
-            Burnout aparece quando você passa tanto tempo em modo de alerta que o corpo deixa de
-            conseguir descansar de verdade. A mente vive em estado de “se eu parar, tudo desmorona”.
+            O burnout surge quando permanecemos tanto tempo em estado de alerta que o corpo desaprende
+            a descansar.  
+            A mente entra no modo “se eu parar, tudo desmorona”.
+
             <br /><br />
-            É marcado por:
+
+            Ele costuma envolver:
             <ul class="clean" style="margin-top: 8px;">
-              <li><span class="bullet">•</span> Exaustão profunda que não melhora só com dormir.</li>
-              <li><span class="bullet">•</span> Perda de sentido no trabalho e na vida diária.</li>
-              <li><span class="bullet">•</span> Irritação, cinismo, vontade de fugir de tudo.</li>
-              <li><span class="bullet">•</span> Corpo gritando: dores, insônia, taquicardia, tensão.</li>
+              <li><span class="bullet">•</span> Exaustão profunda que não melhora apenas com sono.</li>
+              <li><span class="bullet">•</span> Perda de sentido nas atividades diárias.</li>
+              <li><span class="bullet">•</span> Irritação, cinismo e vontade de se afastar de tudo.</li>
+              <li><span class="bullet">•</span> Sinais físicos como dores, insônia e tensão constante.</li>
             </ul>
           </div>
         </div>
 
         <div class="card">
           <div class="pill pill-danger">Importante</div>
-          <div class="card-title" style="margin-top: 8px;">Burnout não é fraqueza, é limite.</div>
+
+          <div class="card-title" style="margin-top: 8px;">Burnout não é falha — é limite.</div>
+
           <p class="card-body">
-            Você não falhou. Pelo contrário: manteve tudo em pé por tanto tempo, que seu organismo
-            precisou acionar o “freio de emergência”. A partir daqui, a pergunta deixa de ser
-            “como eu produzo mais?” e passa a ser “como eu posso existir de um jeito mais humano?”.
+            Não é que você “não dá conta”.  
+            Na verdade, você sustentou mais do que era saudável por tempo demais, até que seu sistema ativou
+            um alerta de proteção: o freio de emergência.  
+            A partir daqui, a pergunta deixa de ser
+            “como eu produzo mais?” e passa a ser  
+            “como posso existir de um jeito mais humano e possível?”.
           </p>
+
           <p class="mini-tag">
-            Se você sente que está “quebrado(a)”, talvez esteja apenas <strong>cansado(a) demais de ser forte o tempo todo.</strong>
+            Se você sente que está “quebrado(a)”, talvez esteja apenas <strong>esgotado(a) de ser forte
+            o tempo todo</strong>.
           </p>
         </div>
       </div>
     </section>
-
     <!-- SINTOMAS -->
     <section id="sintomas">
       <div class="section-label">
         <span class="section-label-dot"></span>
         <span>Reconhecer para poder cuidar</span>
       </div>
+
       <h2 class="section-title">Sintomas comuns de Burnout</h2>
+
       <p class="section-subtitle">
-        Não é só “cansaço”. Burnout mistura sintomas físicos, emocionais e comportamentais. Se você se
-        identificar com vários itens, considere buscar ajuda profissional.
+        Burnout não é apenas “cansaço”.  
+        Ele envolve um conjunto de sintomas físicos, emocionais, cognitivos e comportamentais.  
+        Se você se identificar com vários deles, considere buscar apoio profissional.
       </p>
 
       <div class="grid-3">
@@ -877,48 +852,54 @@
           <div class="card-label">Corpo</div>
           <div class="card-title">Exaustão física</div>
           <p class="card-body">
-            Cansaço constante, sensação de peso no corpo, dores musculares, tensão no pescoço, dores de cabeça,
-            distúrbios digestivos, queda de imunidade.
+            Cansaço constante, sensação de peso no corpo, dores musculares, tensão no pescoço,
+            dores de cabeça, dificuldades digestivas e queda de imunidade.
           </p>
         </div>
+
         <div class="card">
           <div class="card-label">Emoções</div>
           <div class="card-title">Vazio e irritação</div>
           <p class="card-body">
-            Falta de prazer nas coisas que antes eram boas, irritabilidade, explosões emocionais,
-            vontade de se isolar, sensação de “estar no automático”.
+            Diminuição do prazer em atividades que antes eram satisfatórias, irritabilidade,
+            explosões emocionais, vontade de se isolar e sensação de estar vivendo no automático.
           </p>
         </div>
+
         <div class="card">
           <div class="card-label">Pensamentos</div>
-          <div class="card-title">Autocrítica cruel</div>
+          <div class="card-title">Autocrítica intensa</div>
           <p class="card-body">
-            Pensamentos de inadequação, sensação de incompetência, dificuldade de concentração,
-            mente acelerada, preocupação constante com desempenho.
+            Pensamentos de incapacidade, sensação de incompetência, dificuldade de concentração,
+            mente acelerada e preocupação constante com desempenho.
           </p>
         </div>
+
         <div class="card">
           <div class="card-label">Comportamento</div>
           <div class="card-title">Desconexão</div>
           <p class="card-body">
-            Afastamento de pessoas, perda de interesse por hobbies, procrastinação extrema ou
-            hiperfoco produtivo por medo de “falhar”.
+            Afastamento de pessoas, perda de interesse por hobbies, procrastinação severa ou hiperfoco,
+            geralmente motivado pelo medo de falhar.
           </p>
         </div>
+
         <div class="card">
           <div class="card-label">Trabalho</div>
-          <div class="card-title">Cinismo e desmotivação</div>
+          <div class="card-title">Desmotivação e cinismo</div>
           <p class="card-body">
-            Senso de injustiça, raiva do trabalho ou da empresa, vontade de largar tudo,
-            sensação de que nada muda, por mais que você se esforce.
+            Sensação de injustiça, raiva do trabalho, vontade de abandonar tudo,
+            e percepção de que nada muda, independentemente do esforço.
           </p>
         </div>
+
         <div class="card">
           <div class="card-label">Risco</div>
           <div class="card-title">Sinais de alerta máximo</div>
           <p class="card-body">
-            Uso de álcool ou outras substâncias para “aguentar”, pensamentos de que “seria melhor sumir”,
-            ideação suicida. Nesses casos, procure ajuda imediatamente.
+            Uso de álcool ou outras substâncias para aguentar a rotina,
+            pensamentos de desaparecer ou ideação suicida.  
+            Nesses casos, procure ajuda imediatamente.
           </p>
         </div>
       </div>
@@ -930,206 +911,257 @@
         <span class="section-label-dot"></span>
         <span>Autoajuda na prática</span>
       </div>
+
       <h2 class="section-title">“Primeiros socorros emocionais” para momentos de colapso</h2>
+
       <p class="section-subtitle">
-        Isso não substitui terapia, mas pode te ajudar a atravessar o agora. Pense como um kit de emergências
-        para quando você estiver no limite.
+        Estes passos não substituem terapia, mas podem ajudar você a atravessar momentos difíceis.  
+        Pense neles como um kit emocional para quando tudo parece pesado demais.
       </p>
 
       <div class="autoajuda-box">
         <div class="card-soft">
           <div class="card-label">Passo a passo</div>
-          <div class="card-title">1. Aterrissagem: voltar para o corpo</div>
+
+          <div class="card-title">1. Aterrissagem: voltar ao corpo</div>
+
           <ul class="steps" style="margin-top: 8px;">
             <li>
               <div class="steps-number">1</div>
               <div>
-                <strong>Respire 4–6–8.</strong> Inspire contando até 4, segure o ar contando até 6,
-                solte devagar contando até 8. Repita de 5 a 10 vezes.
+                <strong>Respiração 4–6–8.</strong> Inspire contando até 4, segure o ar por 6,
+                e solte lentamente contando até 8.  
+                Faça de 5 a 10 ciclos para ajudar o corpo a reduzir o estado de alerta.
               </div>
             </li>
+
             <li>
               <div class="steps-number">2</div>
               <div>
-                <strong>Exercício 5–4–3–2–1.</strong> Nomeie mentalmente: 5 coisas que vê, 4 que pode tocar,
-                3 que escuta, 2 que pode cheirar, 1 que pode saborear. Isso ajuda a reduzir a sensação de “desligamento”.
+                <strong>Exercício 5–4–3–2–1.</strong>  
+                Observe: 5 coisas que você vê, 4 que pode tocar,  
+                3 que escuta, 2 que pode cheirar e 1 que pode saborear.  
+                Esse exercício ajuda a trazer a mente de volta ao presente.
               </div>
             </li>
+
             <li>
               <div class="steps-number">3</div>
               <div>
-                <strong>Relaxe a postura.</strong> Solte os ombros, descruze as pernas, descrave os dentes,
-                alongue o pescoço. Sair da “postura de guerra” já é um começo.
+                <strong>Relaxe a postura.</strong>  
+                Solte os ombros, descruze as pernas, relaxe a mandíbula e alongue levemente o pescoço.  
+                Pequenos ajustes físicos reduzem a sensação de ameaça.
               </div>
             </li>
           </ul>
 
-          <div class="card-title" style="margin-top: 18px;">2. Conversa honesta consigo mesmo(a)</div>
+          <div class="card-title" style="margin-top: 18px;">
+            2. Conversa honesta consigo mesmo(a)
+          </div>
+
           <ul class="clean" style="margin-top: 8px;">
             <li>
               <span class="bullet">•</span>
-              Pergunte: <em>“O que exatamente está doendo em mim agora?”</em> (não “o que a empresa exige”, mas o que você sente).
+              Pergunte-se: <em>“O que exatamente está doendo em mim agora?”</em>  
+              Não “o que preciso entregar”, mas “o que estou sentindo”.
             </li>
+
             <li>
               <span class="bullet">•</span>
-              Troque o “eu tenho que dar conta de tudo” por “eu posso escolher quais batalhas lutar hoje”.
+              Troque “eu tenho que dar conta de tudo” por  
+              <strong>“eu posso escolher minhas prioridades hoje”.</strong>
             </li>
+
             <li>
               <span class="bullet">•</span>
-              Permita-se respostas pequenas: “hoje eu só consigo fazer o mínimo viável — e isso é humano”.
+              Permita-se o mínimo viável nos dias difíceis.  
+              <em>Pequenos passos também são cuidado.</em>
             </li>
           </ul>
         </div>
 
         <div class="card">
           <div class="card-label">Checklist rápido</div>
-          <div class="card-title">Coisas pequenas que mudam o seu dia</div>
+          <div class="card-title">Ações simples que aliviam o dia</div>
+
           <div style="margin-top: 8px;">
             <div class="checklist-item">
               <div class="check-icon">✓</div>
-              <div>Beber um copo grande de água, sem celular por 2 minutos.</div>
+              <div>Beba um copo grande de água, sem celular, respirando com calma.</div>
             </div>
+
             <div class="checklist-item">
               <div class="check-icon">✓</div>
-              <div>Levantar, abrir uma janela e olhar o horizonte por 30 segundos.</div>
+              <div>Levante-se, abra uma janela e observe o horizonte por alguns segundos.</div>
             </div>
+
             <div class="checklist-item">
               <div class="check-icon">✓</div>
-              <div>Enviar uma mensagem sincera pedindo ajuda ou dizendo “hoje não estou bem”.</div>
+              <div>Envie uma mensagem sincera pedindo apoio ou dizendo “hoje não estou bem”.</div>
             </div>
+
             <div class="checklist-item">
               <div class="check-icon">✓</div>
-              <div>Anotar em um papel: “Hoje eu vou ser <strong>gentil</strong> comigo mesmo(a) em pelo menos 1 coisa”.</div>
+              <div>Anote em um papel: “Hoje serei gentil comigo em pelo menos uma coisa”.</div>
             </div>
           </div>
 
           <div class="warning-box">
-            Se você sente vontade de machucar a si mesmo(a), ou pensa em desistir de tudo, busque ajuda imediata.
-            No Brasil, o <strong>CVV (188)</strong> atende 24h, gratuitamente. Pedir ajuda é um ato de coragem.
+            Se você sente vontade de machucar a si mesmo(a) ou pensa em desistir,
+            procure ajuda imediatamente.  
+            No Brasil, o <strong>CVV (188)</strong> atende 24 horas, gratuitamente.  
+            Buscar ajuda é um ato de coragem — não de fraqueza.
           </div>
         </div>
       </div>
     </section>
-
     <!-- LIVRO / GUIA -->
     <section id="livro">
       <div class="section-label">
         <span class="section-label-dot"></span>
         <span>Material em formato de livro</span>
       </div>
+
       <h2 class="section-title">Guia psicológico “UNOPSICOBURNO — Quando a mente pede pausa”</h2>
+
       <p class="section-subtitle">
-        Imagine um pequeno livro digital para reler nos dias difíceis. Não é mais uma cobrança de produtividade,
-        mas um convite a reorganizar a forma como você se enxerga no mundo.
+        Imagine um pequeno livro digital para revisitar nos dias difíceis.  
+        Não é mais uma cobrança ou lista de deveres, mas um convite para você se enxergar com mais humanidade,
+        reorganizar seus limites e compreender seu próprio ritmo.
       </p>
 
       <div class="book-wrapper">
         <div class="book-cover">
           <div class="book-cover-inner">
+
             <div>
               <div class="book-tag">Guia psicológico • Autoajuda realista</div>
+
               <h3 class="book-title" style="margin-top: 14px;">UNOPSICOBURNO</h3>
+
               <p class="book-sub">
-                Um percurso em 4 capítulos: entender, nomear, cuidar e reconstruir. Sem frases vazias,
-                com profundidade emocional e linguagem humana.
+                Um percurso em quatro capítulos: entender, nomear, cuidar e reconstruir.  
+                Com profundidade emocional e linguagem acessível, criado para acompanhar sua jornada.
               </p>
             </div>
+
             <div>
               <p class="book-quote">
-                “Você não é um robô que deu defeito. Você é um ser humano que foi exigido além dos próprios limites.
-                A cura começa quando a culpa vai embora e dá lugar à compaixão.”
+                “Você não é um robô que apresentou falha.  
+                Você é um ser humano que foi além dos próprios limites por tempo demais.
+                A cura começa quando a culpa dá espaço à compaixão.”
               </p>
             </div>
+
             <div class="book-cta">
               <span class="badge-soft">PDF • Leitura guiada</span>
               <span class="badge-soft">Exercícios de reflexão</span>
-              <span class="badge-soft">Perguntas para sessão de terapia</span>
+              <span class="badge-soft">Perguntas para terapia</span>
             </div>
+
           </div>
         </div>
 
         <div class="card-soft">
           <div class="card-label">Conteúdo sugerido</div>
-          <div class="card-title">O que este livro pode trazer para você</div>
+          <div class="card-title">O que este guia pode oferecer</div>
+
           <ul class="clean" style="margin-top: 8px;">
+
             <li>
               <span class="bullet">•</span>
-              <strong>Capítulo 1 — Nomear a dor.</strong> Histórias e metáforas para entender o que é burnout
-              sem se sentir “errado(a)”.
+              <strong>Capítulo 1 — Nomear a dor.</strong>  
+              Histórias, metáforas e conceitos que ajudam a compreender o burnout
+              sem se sentir “fraco” ou “incapaz”.
             </li>
+
             <li>
               <span class="bullet">•</span>
-              <strong>Capítulo 2 — Corpo em alerta.</strong> Como o sistema nervoso funciona, por que é tão difícil desligar,
-              e formas de aliviar a sobrecarga.
+              <strong>Capítulo 2 — Corpo em alerta.</strong>  
+              Como o sistema nervoso reage ao estresse constante,  
+              por que é tão difícil “desligar” e como aliviar essa sobrecarga.
             </li>
+
             <li>
               <span class="bullet">•</span>
-              <strong>Capítulo 3 — Limites que protegem.</strong> Como dizer “não”, renegociar prazos e criar acordos mais humanos.
+              <strong>Capítulo 3 — Limites que protegem.</strong>  
+              Como estabelecer limites, renegociar expectativas e criar acordos mais humanos consigo mesmo e com o trabalho.
             </li>
+
             <li>
               <span class="bullet">•</span>
-              <strong>Capítulo 4 — Reconstruir a própria história.</strong> Caminhos para recuperar autoestima, prazer e sentido.
+              <strong>Capítulo 4 — Reconstruir a própria história.</strong>  
+              Caminhos para recuperar energia, sentido, autoestima e prazer nas pequenas coisas.
             </li>
+
           </ul>
+
           <p class="mini-tag">
-            Você pode usar esta estrutura para criar um e-book próprio, material de atendimento ou projeto acadêmico.
+            Você pode transformar este conteúdo em um e-book, utilizar como material de apoio,
+            estudo acadêmico ou ferramenta de autocuidado.
           </p>
+
         </div>
       </div>
     </section>
-
     <!-- TESTE RÁPIDO -->
     <section id="teste">
       <div class="section-label">
         <span class="section-label-dot"></span>
         <span>Auto-check de burnout</span>
       </div>
-      <h2 class="section-title">Checklist rápido: como anda sua bateria emocional?</h2>
+
+      <h2 class="section-title">Checklist rápido: como está sua bateria emocional?</h2>
+
       <p class="section-subtitle">
-        Não é um diagnóstico, mas um ponto de partida. Leia com sinceridade, sem se julgar. Marque mentalmente
-        quantos “sim” aparecem.
+        Este não é um diagnóstico, mas um ponto de partida importante.  
+        Leia com sinceridade, sem julgamento.  
+        Observe quantos “sim” ressoam com você.
       </p>
 
       <div class="test-grid">
         <div class="card-soft">
           <ul class="test-list">
+
             <li>
               <div class="test-dot">1</div>
               <div>Você acorda mais cansado(a) do que quando foi dormir?</div>
             </li>
+
             <li>
               <div class="test-dot">2</div>
-              <div>Coisas simples parecem montanhas impossíveis de subir?</div>
+              <div>Atividades simples parecem montanhas difíceis de escalar?</div>
             </li>
+
             <li>
               <div class="test-dot">3</div>
-              <div>
-                Você sente culpa quando descansa, como se estivesse “devendo” produtividade o tempo todo?
-              </div>
+              <div>Você sente culpa quando descansa, como se estivesse “devendo” produtividade?</div>
             </li>
+
             <li>
               <div class="test-dot">4</div>
-              <div>
-                Já pensou que “se eu sumisse por alguns dias, talvez tudo ficasse mais fácil”?
-              </div>
+              <div>Já pensou que “sumir por alguns dias” tornaria tudo mais fácil?</div>
             </li>
+
             <li>
               <div class="test-dot">5</div>
-              <div>
-                Sua memória, foco ou concentração parecem muito piores do que antes?
-              </div>
+              <div>Sua concentração, foco ou memória parecem muito piores do que antes?</div>
             </li>
+
           </ul>
         </div>
+
         <div class="card">
-          <div class="card-title">Como interpretar isso?</div>
+          <div class="card-title">Como interpretar seus resultados?</div>
+
           <p class="test-result">
-            • <strong>1–2 “sim”</strong>: seu corpo está te pedindo mais pausas e descanso real.<br />
-            • <strong>3–4 “sim”</strong>: sinais importantes de sobrecarga. Reorganizar rotina e buscar apoio pode ser essencial.<br />
-            • <strong>5 “sim”</strong>: considere com carinho procurar um(a) psicólogo(a) ou psiquiatra. Você não precisa passar por isso sozinho(a).
+            • <strong>1–2 “sim”</strong>: Seu corpo está pedindo pausas e descanso real.<br />
+            • <strong>3–4 “sim”</strong>: Sinais relevantes de sobrecarga. Reorganizar a rotina e buscar apoio pode ser essencial.<br />
+            • <strong>5 “sim”</strong>: Considerar acompanhamento psicológico ou psiquiátrico é um gesto de cuidado com sua saúde.
           </p>
+
           <p class="mini-tag" style="margin-top: 12px;">
-            Em qualquer cenário, cuidar da saúde mental é um investimento em toda a sua história de vida.
+            Em qualquer cenário, priorizar sua saúde mental transforma sua qualidade de vida.
           </p>
         </div>
       </div>
@@ -1141,101 +1173,113 @@
         <span class="section-label-dot"></span>
         <span>Onde buscar ajuda</span>
       </div>
+
       <h2 class="section-title">Recursos e apoio psicológico</h2>
+
       <p class="section-subtitle">
-        Burnout é sério, mas não precisa ser enfrentado sozinho. Há profissionais, serviços e ferramentas
-        que podem caminhar com você.
+        Burnout é sério — e você não precisa enfrentá-lo sozinho(a).  
+        Existem profissionais, serviços e redes de apoio preparados para caminhar ao seu lado.
       </p>
 
       <div class="grid-3">
+
         <div class="card">
           <div class="card-label">Apoio imediato</div>
           <div class="card-title">CVV — Centro de Valorização da Vida</div>
+
           <p class="card-body">
-            Telefone <strong>188</strong> (24h, gratuito) • Chat e e-mail em
-            <a href="https://www.cvv.org.br" target="_blank" rel="noreferrer">cvv.org.br</a>.
-            <br />Para momentos de crise, pensamentos suicidas ou quando você sente que não aguenta mais.
+            Telefone <strong>188</strong> (24h, gratuito).  
+            Também oferece chat e e-mail em  
+            <a href="https://www.cvv.org.br" target="_blank" rel="noreferrer">cvv.org.br</a>.  
+            Indicado para momentos de crise emocional, ideação suicida ou quando você sente que não aguenta mais.
           </p>
         </div>
+
         <div class="card">
           <div class="card-label">Atendimento público</div>
           <div class="card-title">SUS — Caps e unidades de saúde</div>
+
           <p class="card-body">
-            Procure os <strong>Centros de Atenção Psicossocial (Caps)</strong> da sua cidade ou postos de saúde.
-            Informe que está em sofrimento emocional intenso e peça orientação.
+            Procure os <strong>Centros de Atenção Psicossocial (Caps)</strong> ou posto de saúde da sua cidade.  
+            Informe que está passando por sofrimento emocional intenso e peça orientação.
           </p>
         </div>
+
         <div class="card">
           <div class="card-label">Online</div>
           <div class="card-title">Plataformas de terapia</div>
+
           <p class="card-body">
-            Serviços de terapia online, planos de saúde e atendimentos sociais em clínicas-escola podem
-            reduzir custos e facilitar o acesso. Buscar ajuda é um gesto de cuidado, não de fraqueza.
+            Terapia online, atendimentos sociais de clínicas-escola e planos de saúde podem facilitar o acesso.  
+            Buscar ajuda é um gesto de coragem — nunca de fraqueza.
           </p>
         </div>
+
+      </div>
+    </section>
+    <section id="livros-extra">
+      <div class="section-label">
+        <span class="section-label-dot"></span>
+        <span>Leituras recomendadas</span>
+      </div>
+
+      <h2 class="section-title">Livros que fortalecem a jornada emocional</h2>
+
+      <p class="section-subtitle">
+        Seleção de obras que ajudam no entendimento da mente humana,  
+        autocuidado, ansiedade, trauma e burnout.
+      </p>
+
+      <div class="grid-3" style="margin-top: 32px;">
+
+        <div class="card">
+          <img src="https://m.media-amazon.com/images/I/71SfIe1eCFL._AC_UF1000,1000_QL80_.jpg"
+               style="height: 220px; object-fit: cover; margin-bottom: 12px;">
+          <div class="card-title">O Corpo Fala</div>
+          <p class="card-body">Como emoções não expressas se transformam em sinais físicos.</p>
+        </div>
+
+        <div class="card">
+          <img src="https://m.media-amazon.com/images/I/71Wy+qN7BjL._AC_UF1000,1000_QL80_.jpg"
+               style="height: 220px; object-fit: cover; margin-bottom: 12px;">
+          <div class="card-title">A Coragem de Ser Imperfeito</div>
+          <p class="card-body">Um convite à vulnerabilidade e ao autocuidado sem culpa.</p>
+        </div>
+
+        <div class="card">
+          <img src="https://m.media-amazon.com/images/I/81kqrwS1nNL._AC_UF1000,1000_QL80_.jpg"
+               style="height: 220px; object-fit: cover; margin-bottom: 12px;">
+          <div class="card-title">O Milagre da Manhã</div>
+          <p class="card-body">Hábitos simples que ajudam a aliviar ansiedade e recuperar energia.</p>
+        </div>
+
       </div>
     </section>
 
-    <section id="livros-extra">
-  <div class="section-label">
-    <span class="section-label-dot"></span>
-    <span>Leituras recomendadas</span>
-  </div>
-
-  <h2 class="section-title">Livros que ajudam na jornada emocional</h2>
-  <p class="section-subtitle">
-    Seleção de obras que auxiliam no entendimento da mente humana,
-    autoconhecimento, ansiedade e burnout.
-  </p>
-
-  <div class="grid-3" style="margin-top: 32px;">
-
-    <div class="card">
-      <img src="https://m.media-amazon.com/images/I/71SfIe1eCFL._AC_UF1000,1000_QL80_.jpg"
-           style="height: 220px; object-fit: cover; margin-bottom: 12px;">
-      <div class="card-title">O Corpo Fala</div>
-      <p class="card-body">Como emoções reprimidas viram sinais físicos.</p>
-    </div>
-
-    <div class="card">
-      <img src="https://m.media-amazon.com/images/I/71Wy+qN7BjL._AC_UF1000,1000_QL80_.jpg"
-           style="height: 220px; object-fit: cover; margin-bottom: 12px;">
-      <div class="card-title">A Coragem de Ser Imperfeito</div>
-      <p class="card-body">Reflexões sobre vulnerabilidade e autocuidado.</p>
-    </div>
-
-    <div class="card">
-      <img src="https://m.media-amazon.com/images/I/81kqrwS1nNL._AC_UF1000,1000_QL80_.jpg"
-           style="height: 220px; object-fit: cover; margin-bottom: 12px;">
-      <div class="card-title">O Milagre da Manhã</div>
-      <p class="card-body">Hábitos simples que reduzem ansiedade.</p>
-    </div>
-
-  </div>
-</section>
     <footer>
-  <div style="display: flex; flex-direction: column; gap: 6px;">
-    <span class="quote">“O cuidado com a saúde mental não é luxo, é necessidade.”</span>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <span class="quote">“Cuidar da saúde mental não é luxo — é sobrevivência.”</span>
 
-    <span style="font-size: 0.75rem; color: #9ca3af;">
-      Pesquisa desenvolvida por estudantes da <strong>Unochapecó</strong>.
-    </span>
+        <span style="font-size: 0.75rem; color: #9ca3af;">
+          Projeto desenvolvido por estudantes da <strong>Unochapecó</strong>.
+        </span>
 
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Unochapec%C3%B3_-_Marca.png/640px-Unochapec%C3%B3_-_Marca.png"
-         alt="Logo Unochapecó"
-         style="width: 120px; opacity: 0.75; margin-top: 6px;">
-  </div>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Unochapec%C3%B3_-_Marca.png/640px-Unochapec%C3%B3_-_Marca.png"
+          alt="Logo Unochapecó"
+          style="width: 120px; opacity: 0.75; margin-top: 6px;">
+      </div>
 
-  <span class="tag">Psicologia & Autocuidado • Burnout</span>
+      <span class="tag">Psicologia & Autocuidado • Burnout</span>
 
-  <span style="font-size: 0.68rem; opacity: 0.5; margin-top: 8px;">
-    Created by <strong>Ricardo</strong>
-  </span>
-</footer>
+      <span style="font-size: 0.68rem; opacity: 0.5; margin-top: 8px;">
+        Criado por <strong>Ricardo</strong>
+      </span>
+    </footer>
   </main>
 
   <script>
-    // Pequeno efeito: ao rolar, adiciona sombra mais forte na navbar
+    // Efeito sutil de sombra ao rolar a página
     document.addEventListener("scroll", () => {
       const nav = document.querySelector(".navbar");
       if (window.scrollY > 10) {
