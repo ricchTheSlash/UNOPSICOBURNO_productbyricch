@@ -2,15 +2,20 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Burnout — Entenda, Previna, Cuide-se</title>
+  <title>Burnout — Compreensão Clínica, Autocuidado e Regulação</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta
     name="description"
-    content="Burnout: quando o corpo grita o que a mente não suporta mais. Entenda, previna-se e cuide da sua saúde mental."
+    content="Burnout: uma condição psicofisiológica séria. Entenda seus sinais, compreenda os mecanismos envolvidos e explore ferramentas de regulação emocional."
   />
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
+    /* ============================================
+       PALETA & AJUSTES ESTÉTICOS REFINADOS
+       ============================================ */
     :root {
       --bg: #050816;
       --bg-alt: #0b1020;
@@ -18,538 +23,836 @@
       --accent-soft: rgba(155, 92, 255, 0.12);
       --accent-strong: #d16eff;
       --text: #f5f5f7;
-      --muted: #a0a3b1;
+      --muted: #b9bbca;
       --danger: #ff6b81;
       --card: #11162a;
-      --card-soft: rgba(15, 23, 42, 0.9);
-      --border: rgba(148, 163, 184, 0.25);
+      --border: rgba(148, 163, 184, 0.22);
+
       --radius-xl: 22px;
+
+      /* Sombras suavizadas para visual mais profissional */
+      --shadow-soft: 0 12px 32px rgba(0,0,0,0.35);
+      --shadow-light: 0 0 28px rgba(155, 92, 255, 0.35);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       font-family: "Poppins", sans-serif;
-      background: radial-gradient(circle at top left, #1f143c, #050816);
+      background: radial-gradient(circle at top left, #1f143c 0, #050816 40%, #020617 100%);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.65;
+      scroll-behavior: smooth;
     }
 
-    img { max-width: 100%; border-radius: 18px; display: block; }
+    img {
+      max-width: 100%;
+      display: block;
+      border-radius: 18px;
+    }
 
-    /* NAVBAR */
+    /* ============================================
+       NAVBAR (REFINADO)
+       ============================================ */
     .navbar {
-      position: sticky; top: 0; z-index: 40;
-      backdrop-filter: blur(16px);
-      background: rgba(5, 8, 22, 0.8);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(5, 8, 22, 0.76);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      transition: box-shadow .3s ease;
     }
 
     .nav-inner {
       max-width: 1120px;
-      margin: auto;
-      padding: 14px 20px;
+      margin: 0 auto;
+      padding: 16px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .nav-links { display: flex; gap: 18px; }
-    .nav-links a { color: var(--muted); font-size: .85rem; text-transform: uppercase; }
-
-    .nav-cta {
-      padding: 8px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      background: rgba(155,92,255,0.2);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: var(--text);
+    .brand-title {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: .85rem;
+      font-weight: 600;
     }
 
-    /* HERO */
-    .page { max-width: 1120px; margin: auto; padding: 30px 20px; }
+    .nav-links a {
+      margin-left: 20px;
+      text-transform: uppercase;
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: .18s ease;
+    }
 
+    .nav-links a:hover {
+      color: var(--accent-strong);
+      border-color: var(--accent-strong);
+    }
+
+    .nav-cta {
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: 1px solid rgba(209, 213, 219, 0.2);
+      background: linear-gradient(135deg, rgba(155,92,255,0.22), rgba(15,23,42,0.95));
+      color: var(--text);
+      font-size: .78rem;
+      letter-spacing: .07em;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(155,92,255,0.38);
+    }
+
+    /* ============================================
+       WRAPPER GERAL
+       ============================================ */
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 20px 80px;
+    }
+
+    section {
+      margin-top: 80px;
+    }
+
+    /* ============================================
+       HERO (Profissional, Clínico e Humano)
+       ============================================ */
     .hero {
       margin-top: 40px;
       display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 30px;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 32px;
       align-items: center;
     }
 
-    .hero-title { font-size: 2.5rem; font-weight: 700; }
-    .hero-title span { background: linear-gradient(120deg,#f97316,#ec4899,#6366f1); -webkit-background-clip:text; color:transparent; }
-
-    .hero-sub { color: var(--muted); max-width: 520px; }
-
-    .hero-meme {
-      margin: 18px 0;
-      text-align: center;
-      font-size: .8rem;
-      color: var(--muted);
+    .hero-title {
+      font-size: clamp(2rem, 3vw + 1rem, 2.9rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 14px;
     }
 
-    .hero-meme img { margin: auto; max-width: 330px; }
+    .hero-title span {
+      background: linear-gradient(120deg, #f97316, #ec4899, #6366f1);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      max-width: 540px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .hero-visual {
+      border-radius: 24px;
+      padding: 18px;
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.35), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(148,163,184,0.32);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+    }
+
+    .hero-stat {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      font-size: .78rem;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.45);
+      backdrop-filter: blur(6px);
+    }
   </style>
 </head>
+
 <body>
 
-<header class="navbar">
-  <div class="nav-inner">
-    <div class="brand">
-      <div class="brand-logo"></div>
+  <!-- ============================
+       NAVBAR
+       ============================ -->
+  <header class="navbar">
+    <div class="nav-inner">
       <div>
         <div class="brand-title">UNOPSICOBURNO</div>
-        <div style="font-size:.7rem;color:var(--muted)">Burnout • Psicologia</div>
-      </div>
-    </div>
-
-    <nav class="nav-links">
-      <a href="#sobre">O que é</a>
-      <a href="#sintomas">Sintomas</a>
-      <a href="#autoajuda">Autoajuda</a>
-      <a href="#livro">Livro</a>
-      <a href="#extras">Extras</a>
-      <a href="#recursos">Apoio</a>
-    </nav>
-
-    <button class="nav-cta" onclick="document.getElementById('autoajuda').scrollIntoView({behavior:'smooth'})">
-      🧠 Primeiros Socorros
-    </button>
-  </div>
-</header>
-
-<main class="page">
-
-<!-- HERO -->
-<section id="topo">
-  <div class="hero">
-
-    <div>
-      <h1 class="hero-title">
-        Burnout não é frescura.<br>
-        <span>É seu corpo pedindo ajuda.</span>
-      </h1>
-
-      <p class="hero-sub">
-        Quando tudo cansa, nada anima e a cabeça não desliga.  
-        Aqui você encontra um guia simples para entender o que está sentindo — e começar a se cuidar.
-      </p>
-
-      <!-- MEME 1 -->
-      <div class="hero-meme">
-        <img src="./images/meme1.jpg" alt="Bob Esponja esgotado">
-        <p>“Eu depois de dizer que ia descansar 5 min e acordei 3 semanas depois.”</p>
-      </div>
-    </div>
-
-    <aside>
-      <img src="./images/hero.jpg" style="border-radius:20px;height:280px;width:100%;object-fit:cover">
-    </aside>
-
-  </div>
-</section>
-
-<!-- SEÇÃO O QUE É -->
-<section id="sobre">
-  <h2>O que é Burnout?</h2>
-
-  <p style="max-width:600px;color:var(--muted)">
-    Burnout é quando o corpo entra em modo alerta por tanto tempo que esquecer como relaxar.  
-    Não é fraqueza — é limite.
-  </p>
-
-  <!-- MEME 2 (primeiro uso do meme2) -->
-  <div class="hero-meme">
-    <img src="./images/meme2.jpg" alt="Hello Kitty computador pegando fogo">
-    <p>“Só mais um email e eu paro” — o email:</p>
-  </div>
-  <div class="grid-2" style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-
-    <div class="card-soft" style="background:rgba(15,23,42,0.9);padding:18px;border-radius:18px">
-      <h3 style="margin-bottom:8px">Em palavras simples</h3>
-      <p style="color:var(--muted)">
-        Burnout acontece quando a vida vira “apenas sobreviver”.  
-        Você empurra, empurra… até que o corpo diz: chega.
-      </p>
-
-      <ul style="margin-top:10px;color:var(--muted)">
-        <li>• Exaustão que não passa nem dormindo.</li>
-        <li>• Perda de sentido nas atividades.</li>
-        <li>• Irritação, distanciamento, cinismo.</li>
-        <li>• Sintomas físicos como dores e insônia.</li>
-      </ul>
-    </div>
-
-    <div class="card-soft" style="background:rgba(15,23,42,0.9);padding:18px;border-radius:18px">
-      <h3 style="margin-bottom:8px">Não é falha — é limite</h3>
-      <p style="color:var(--muted)">
-        Você não “não dá conta”.  
-        Você só carregou peso demais por tempo demais.  
-        O burnout é o freio de emergência do corpo.
-      </p>
-
-      <!-- MEME 3 -->
-      <div class="hero-meme" style="margin-top:15px">
-        <img src="./images/meme3.jpg" alt="Hello Kitty gritando">
-        <p>“Eu tentando resolver problemas que nem são meus.”</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- SINTOMAS -->
-<section id="sintomas" style="margin-top:60px">
-  <h2>Sintomas de Burnout</h2>
-  <p style="color:var(--muted);max-width:600px">
-    Não é “cansaço”.  
-    É uma combinação de sintomas que afeta corpo, mente e comportamento.
-  </p>
-
-  <div class="grid-3" style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
-
-    <div class="card-soft" style="padding:16px;border-radius:18px">
-      <h4>Exaustão física</h4>
-      <p style="color:var(--muted)">Cansaço constante, dores, tensão, imunidade baixa.</p>
-    </div>
-
-    <div class="card-soft" style="padding:16px;border-radius:18px">
-      <h4>Vazio e irritação</h4>
-      <p style="color:var(--muted)">Nada anima, tudo irrita, vontade de sumir.</p>
-    </div>
-
-    <div class="card-soft" style="padding:16px;border-radius:18px">
-      <h4>Autocrítica excessiva</h4>
-      <p style="color:var(--muted)">Sensação de incapacidade, mente acelerada.</p>
-    </div>
-
-    <div class="card-soft" style="padding:16px;border-radius:18px">
-      <h4>Desconexão</h4>
-      <p style="color:var(--muted)">Procrastinação, isolamento, hobbies abandonados.</p>
-    </div>
-
-    <div class="card-soft" style="padding:16px;border-radius:18px">
-      <h4>Trabalho sem sentido</h4>
-      <p style="color:var(--muted)">Desmotivação e raiva da rotina.</p>
-    </div>
-
-    <div class="card-soft" style="padding:16px;border-radius:18px">
-      <h4>Sinais de alerta máximo</h4>
-      <p style="color:var(--muted)">Uso de substâncias, pensamentos de desistir.</p>
-    </div>
-
-  </div>
-
-  <!-- MEME 4 -->
-  <div class="hero-meme" style="margin-top:20px">
-    <img src="./images/meme4.jpg" alt="Hello Kitty hoje nem deu tempo de chorar">
-    <p>“Agenda cheia, vontade de viver vazia.”</p>
-  </div>
-
-</section>
-
-<!-- AUTOAJUDA -->
-<section id="autoajuda" style="margin-top:60px">
-  <h2>Primeiros socorros emocionais</h2>
-
-  <p style="max-width:600px;color:var(--muted)">
-    Não substitui terapia, mas ajuda muito quando o mundo parece pesado demais.
-  </p>
-
-  <div class="autoajuda-box" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
-
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <h3>1. Volte ao corpo</h3>
-
-      <ul style="color:var(--muted);margin-top:10px">
-        <li>• Respire 4–6–8.</li>
-        <li>• Exercício 5–4–3–2–1.</li>
-        <li>• Relaxe ombros, mandíbula e postura.</li>
-      </ul>
-
-      <!-- MEME 2 — segundo uso -->
-      <div class="hero-meme" style="margin-top:15px">
-        <img src="./images/meme2.jpg" alt="Hello Kitty PC em chamas">
-        <p>“Eu tentando parecer tranquilo enquanto tudo pega fogo.”</p>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:2px;">
+          Compreensão • Regulação • Autocuidado
+        </div>
       </div>
 
-      <h3 style="margin-top:18px">2. Fale consigo mesmo</h3>
-      <ul style="color:var(--muted);margin-top:10px">
-        <li>• Pergunte: o que está doendo em mim?</li>
-        <li>• Troque “tenho que” por “posso priorizar”.</li>
-        <li>• Faça só o mínimo viável.</li>
-      </ul>
+      <nav class="nav-links">
+        <a href="#sobre">O que é</a>
+        <a href="#sintomas">Sintomas</a>
+        <a href="#autoajuda">Autoajuda</a>
+        <a href="#guia">Mini Guia</a>
+        <a href="#ferramentas">Ferramentas</a>
+      </nav>
 
+      <button class="nav-cta" onclick="document.getElementById('ferramentas').scrollIntoView({behavior:'smooth'})">
+        Primeiros passos
+      </button>
     </div>
+  </header>
 
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <h3>Checklist rápido</h3>
+  <!-- ============================
+       HERO
+       ============================ -->
+  <main class="page">
 
-      <ul style="color:var(--muted);margin-top:10px">
-        <li>• Beba água com calma.</li>
-        <li>• Abra uma janela e respire.</li>
-        <li>• Peça apoio a alguém.</li>
-        <li>• Seja gentil com você.</li>
-      </ul>
-
-      <!-- MEME 5 -->
-      <div class="hero-meme" style="margin-top:20px">
-        <img src="./images/meme5.jpg" alt="Hello Kitty caos">
-        <p>“Minha vida: versão beta permanente.”</p>
-      </div>
-
-      <div class="warning-box" style="margin-top:16px;padding:12px;border-radius:10px;border:1px dashed #f77;color:#fbb">
-        Pensamentos de desistir?  
-        Ligue 188 — CVV.  
-        Falar salva vidas.
-      </div>
-
-    </div>
-
-  </div>
-</section>
-<!-- LIVRO / GUIA -->
-<section id="livro" style="margin-top:60px">
-  <h2>Guia psicológico — UNOPSICOBURNO</h2>
-
-  <p style="color:var(--muted);max-width:600px">
-    Um mini-livro para dias difíceis: curto, direto e feito para te ajudar a entender e reorganizar sua mente.
-  </p>
-
-  <div class="book-wrapper" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
-
-    <div class="book-cover" style="background:rgba(99,102,241,0.3);padding:14px;border-radius:20px;border:1px solid rgba(255,255,255,0.15)">
-      <div class="book-cover-inner" style="padding:18px;border-radius:18px;background:#111827;display:flex;flex-direction:column;gap:20px">
+    <section id="topo">
+      <div class="hero">
 
         <div>
-          <span class="book-tag" style="padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);font-size:.75rem;color:var(--muted)">Guia emocional</span>
+          <h1 class="hero-title">
+            Burnout não é fragilidade.<br>
+            <span>É um estado de exaustão psicofisiológica.</span>
+          </h1>
 
-          <h3 style="margin-top:15px">UNOPSICOBURNO</h3>
-
-          <p style="color:var(--muted);margin-top:6px">
-            Quatro capítulos simples: entender, nomear, cuidar e reconstruir.
+          <p class="hero-sub">
+            Quando a demanda externa ultrapassa, por tempo prolongado, a capacidade de autorregulação do organismo,
+            surgem sinais claros: redução funcional, hiperativação do sistema de estresse e esgotamento emocional.
+            Este espaço reúne informações clínicas acessíveis, ferramentas de regulação emocional e recursos práticos
+            para quem deseja compreender — e cuidar — de si mesmo com responsabilidade.
           </p>
         </div>
 
-        <blockquote style="border-left:3px solid #aaa;padding-left:10px;color:#eee">
-          “Você não quebrou.  
-          Só chegou no limite por carregar mais do que deveria.”
-        </blockquote>
+        <aside class="hero-visual">
+          <img src="./images/hero.jpg" alt="Exaustão emocional representada em ambiente de trabalho" style="height:260px;object-fit:cover;border-radius:16px;">
 
-        <div style="display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:.8rem">
-          <span class="badge-soft">PDF</span>
-          <span class="badge-soft">Exercícios</span>
-          <span class="badge-soft">Perguntas guia</span>
-        </div>
+          <div class="hero-stat">
+            <strong style="font-size:1.3rem;color:var(--danger);">76%</strong>
+            <div style="color:var(--muted);margin-top:2px;">
+              relatam sintomas consistentes com sobrecarga crônica de estresse.
+            </div>
+          </div>
+        </aside>
 
+      </div>
+    </section>
+<!-- ============================
+     SEÇÃO: O QUE É BURNOUT?
+     ============================ -->
+<section id="sobre">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Fundamentos Clínicos</span>
+  </div>
+
+  <h2 class="section-title">O que é burnout?</h2>
+
+  <p class="section-subtitle">
+    Burnout é um estado de exaustão psicofisiológica resultante de estressores prolongados —
+    especialmente em contextos de pressão contínua, alta responsabilidade e baixa capacidade
+    de recuperação. Não se trata de sensibilidade, falta de vontade ou fraqueza; é uma alteração
+    funcional real nos sistemas de regulação do estresse.
+  </p>
+
+  <!-- Acordeões clínicos -->
+  <div class="accordion">
+
+    <!-- Conceito clínico -->
+    <div class="acc-item">
+      <button class="acc-btn">Definição clínica do burnout</button>
+      <div class="acc-content">
+        <p>
+          O burnout é caracterizado por três dimensões principais:
+          <strong>exaustão emocional</strong>, <strong>despersonalização</strong> e
+          <strong>redução da eficácia profissional</strong>.
+          Ele surge quando a ativação do sistema de estresse se mantém continuamente elevada,
+          ultrapassando a capacidade fisiológica de recuperação.
+        </p>
       </div>
     </div>
 
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <h3>Conteúdo do guia</h3>
-
-      <ul style="color:var(--muted);margin-top:10px">
-        <li>• Capítulo 1 — Nomear a dor.</li>
-        <li>• Capítulo 2 — Corpo em alerta.</li>
-        <li>• Capítulo 3 — Limites que protegem.</li>
-        <li>• Capítulo 4 — Reconstrução emocional.</li>
-      </ul>
+    <!-- Fisiologia -->
+    <div class="acc-item">
+      <button class="acc-btn">Como o burnout afeta o corpo e o sistema nervoso</button>
+      <div class="acc-content">
+        <p>
+          O organismo opera por longos períodos em hiperativação autonômica, com liberação constante
+          de cortisol e adrenalina. Essa hiperativação do eixo HPA (hipotálamo–pituitária–adrenal)
+          gera efeitos como:
+        </p>
+        <ul class="clean">
+          <li>• redução da variabilidade cardíaca;</li>
+          <li>• prejuízo no sono e no ciclo ultradiano;</li>
+          <li>• dificuldade de foco e sobrecarga cognitiva;</li>
+          <li>• tensão muscular persistente e dores inespecíficas.</li>
+        </ul>
+      </div>
     </div>
 
+    <!-- Impactos funcionais -->
+    <div class="acc-item">
+      <button class="acc-btn">Impacto emocional e funcional</button>
+      <div class="acc-content">
+        <p>
+          O burnout compromete a capacidade de regulação emocional, reduz a percepção de competência,
+          altera o senso de identidade e provoca sensação de distanciamento das próprias atividades.
+          Funcionalmente, gera queda de produtividade, perda de interesse e dificuldade de se
+          engajar em tarefas simples.
+        </p>
+      </div>
+    </div>
+
+    <!-- Fatores -->
+    <div class="acc-item">
+      <button class="acc-btn">Por que ele se desenvolve?</button>
+      <div class="acc-content">
+        <p>
+          Diversos fatores contribuem para o desenvolvimento do burnout:
+        </p>
+        <ul class="clean">
+          <li>• demandas superiores à capacidade adaptativa;</li>
+          <li>• ambientes altamente competitivos ou instáveis;</li>
+          <li>• falta de apoio ou reconhecimento;</li>
+          <li>• autocobrança intensa baseada em padrões rígidos;</li>
+          <li>• baixa margem de recuperação entre ciclos de esforço.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Meme pequeno e discreto -->
+  <div style="text-align:center;margin-top:30px;opacity:0.75;">
+    <img src="./images/meme1.jpg" alt="Meme leve sobre sobrecarga psicológica" style="max-width:180px;">
+    <p style="font-size:.75rem;color:var(--muted);margin-top:6px;">
+      Um retrato bem-humorado da sobrecarga cotidiana — até o corpo dá o alerta.
+    </p>
   </div>
 </section>
 
 
-<!-- TESTE RÁPIDO -->
-<section id="teste" style="margin-top:60px">
-  <h2>Auto-check de burnout</h2>
+<!-- ============================
+     SEÇÃO: SINTOMAS (CLÍNICA)
+     ============================ -->
+<section id="sintomas">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Identificação Clínica</span>
+  </div>
 
-  <p style="color:var(--muted);max-width:600px">
-    Não é diagnóstico — é só um termômetro do seu estado emocional.
+  <h2 class="section-title">Sintomas de burnout</h2>
+
+  <p class="section-subtitle">
+    O burnout apresenta manifestações emocionais, cognitivas, físicas e comportamentais.
+    Embora a experiência varie entre indivíduos, há padrões clínicos consistentes que auxiliam
+    na identificação da síndrome.
   </p>
 
-  <div class="test-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
+  <div class="grid-3">
 
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <ul style="color:var(--muted)">
-        <li>• Acorda mais cansado do que dormiu?</li>
-        <li>• Tudo parece difícil?</li>
-        <li>• Sente culpa quando descansa?</li>
-        <li>• Já quis desaparecer por uns dias?</li>
-        <li>• Foco e memória pioraram?</li>
+    <!-- Exaustão -->
+    <div class="card">
+      <div class="card-label">Dimensão 1</div>
+      <div class="card-title">Exaustão emocional</div>
+      <p class="card-body">
+        Sensação de esgotamento contínuo, baixa energia, dificuldade de iniciar tarefas e
+        incapacidade de recuperar vitalidade mesmo após descanso aparente.
+      </p>
+      <button class="expand-btn" onclick="toggleDetails(this)">Ver detalhes</button>
+      <div class="expand-content">
+        <p>Fisiologicamente, está ligada à hiperativação contínua do sistema de estresse.</p>
+      </div>
+    </div>
+
+    <!-- Despersonalização -->
+    <div class="card">
+      <div class="card-label">Dimensão 2</div>
+      <div class="card-title">Despersonalização</div>
+      <p class="card-body">
+        Sentimento de distanciamento, cinismo e desengajamento. A pessoa passa a operar de modo
+        automático, com menor sensibilidade emocional.
+      </p>
+      <button class="expand-btn" onclick="toggleDetails(this)">Ver detalhes</button>
+      <div class="expand-content">
+        <p>Um mecanismo psicológico para lidar com sobrecarga prolongada.</p>
+      </div>
+    </div>
+
+    <!-- Redução da eficácia -->
+    <div class="card">
+      <div class="card-label">Dimensão 3</div>
+      <div class="card-title">Redução da eficácia</div>
+      <p class="card-body">
+        Queda na sensação de competência, dúvidas constantes sobre desempenho e percepção
+        distorcida de falha.
+      </p>
+      <button class="expand-btn" onclick="toggleDetails(this)">Ver detalhes</button>
+      <div class="expand-content">
+        <p>Alterações cognitivas relacionadas à sobrecarga e déficit de regulação emocional.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Meme pequeno -->
+  <div style="text-align:center;margin-top:36px;opacity:.78;">
+    <img src="./images/meme2.jpg" alt="Humor leve sobre exaustão" style="max-width:170px;">
+    <p style="font-size:.75rem;color:var(--muted);margin-top:6px;">
+      Às vezes o corpo tenta avisar antes da mente — e ninguém escuta.
+    </p>
+  </div>
+
+</section>
+
+<!-- ============================
+     SCRIPTS DE INTERAÇÃO
+     ============================ -->
+<script>
+  // Acordeões
+  document.querySelectorAll(".acc-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      btn.classList.toggle("active");
+      const content = btn.nextElementSibling;
+      content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
+    });
+  });
+
+  // Expandir detalhes dos sintomas
+  function toggleDetails(btn) {
+    const content = btn.nextElementSibling;
+    content.style.display = content.style.display === "block" ? "none" : "block";
+    btn.textContent = content.style.display === "block" ? "Ocultar detalhes" : "Ver detalhes";
+  }
+</script>
+<!-- ============================
+     SEÇÃO: AUTOAJUDA PROFISSIONAL
+     ============================ -->
+<section id="autoajuda">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Regulação Emocional</span>
+  </div>
+
+  <h2 class="section-title">Estratégias de regulação em momentos de sobrecarga</h2>
+
+  <p class="section-subtitle">
+    Estas práticas não substituem psicoterapia, mas são intervenções baseadas em evidências que ajudam
+    a reduzir hiperativação, reorganizar a atenção e restaurar a autonomia emocional durante episódios
+    de estresse intenso.
+  </p>
+
+  <div class="grid-2">
+
+    <!-- Passos clínicos -->
+    <div class="card-soft">
+      <div class="card-label">Intervenções imediatas</div>
+      <div class="card-title">Aterrissagem e estabilização</div>
+
+      <ul class="steps" style="margin-top:12px;">
+
+        <li>
+          <div class="steps-number">1</div>
+          <div>
+            <strong>Respiração autonômica 4–6–8.</strong><br>
+            Técnica que reduz a ativação do eixo HPA. Inspire por 4s, segure por 6s e solte por 8s.
+          </div>
+        </li>
+
+        <li>
+          <div class="steps-number">2</div>
+          <div>
+            <strong>Grounding sensorial 5–4–3–2–1.</strong><br>
+            Reorienta o cérebro para o momento presente, reduzindo ruminação cognitiva.
+          </div>
+        </li>
+
+        <li>
+          <div class="steps-number">3</div>
+          <div>
+            <strong>Desativação muscular.</strong><br>
+            Relaxar mandíbula, ombros e postura interrompe o ciclo de tensão periférica.
+          </div>
+        </li>
+
+      </ul>
+
+      <div class="card-title" style="margin-top:24px;">Organização interna</div>
+
+      <ul class="clean" style="margin-top:12px;">
+        <li>• Identifique o que está realmente sob seu controle imediato.</li>
+        <li>• Reduza tarefas ao mínimo clinicamente possível.</li>
+        <li>• Nomeie a emoção dominante (isso reduz a ativação da amígdala).</li>
+        <li>• Reestruture autocríticas (“falha” → “sinal de esgotamento”).</li>
       </ul>
     </div>
 
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <h3>Como interpretar</h3>
-      <p style="color:var(--muted);margin-top:10px">
-        1–2 “sim”: seu corpo quer pausas. <br>
-        3–4 “sim”: sobrecarga real. <br>
-        5 “sim”: considere apoio psicológico.
+    <!-- Checklist -->
+    <div class="card">
+      <div class="card-label">Checklist rápido</div>
+      <div class="card-title">Microintervenções úteis</div>
+
+      <div style="margin-top:12px;">
+
+        <div class="checklist-item">
+          <div class="check-icon">✓</div>
+          <div>Respire profundamente por 90 segundos para baixar a ativação autonômica.</div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="check-icon">✓</div>
+          <div>Abra uma janela, mude o foco visual e permita oxigenação.</div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="check-icon">✓</div>
+          <div>Comunique: “estou sobrecarregado”. Nomear reduz tensão interna.</div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="check-icon">✓</div>
+          <div>Escolha apenas uma prioridade realista para o próximo ciclo de energia.</div>
+        </div>
+
+      </div>
+
+      <div class="warning-box">
+        Se houver ideação suicida, vazio extremo ou sensação de perda de controle,
+        procure apoio imediato. O <strong>CVV (188)</strong> oferece suporte 24h.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Meme pequeno -->
+  <div style="text-align:center;margin-top:32px;opacity:.8;">
+    <img src="./images/meme3.jpg" alt="Humor leve sobre lidar com a vida adulta" style="max-width:160px;">
+    <p style="font-size:.75rem;color:var(--muted);margin-top:4px;">
+      Às vezes a sobrecarga é tanta que até a Hello Kitty entra em modo de contenção.
+    </p>
+  </div>
+
+</section>
+
+<!-- ============================
+     MINI GUIA CLÍNICO (ABAS)
+     ============================ -->
+<section id="guia">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Mini Guia Clínico</span>
+  </div>
+
+  <h2 class="section-title">Guia psicológico — Burnout em quatro pilares</h2>
+
+  <p class="section-subtitle">
+    Um resumo clínico estruturado para compreender o burnout de forma técnica, acessível e aplicada.
+  </p>
+
+  <!-- Abas -->
+  <div class="tabs">
+    <button class="tab active" onclick="openTab(event,'pilar1')">1. Compreensão</button>
+    <button class="tab" onclick="openTab(event,'pilar2')">2. Psicofisiologia</button>
+    <button class="tab" onclick="openTab(event,'pilar3')">3. Ações</button>
+    <button class="tab" onclick="openTab(event,'pilar4')">4. Apoio</button>
+  </div>
+
+  <!-- Conteúdo das abas -->
+  <div id="pilar1" class="tab-content" style="display:block;">
+    <p>
+      O burnout emerge como resposta adaptativa que se torna disfuncional quando a exigência externa
+      persiste além da capacidade de regulação. Ele envolve alterações emocionais, cognitivas,
+      comportamentais e fisiológicas.
+    </p>
+  </div>
+
+  <div id="pilar2" class="tab-content">
+    <p>
+      Em termos biomédicos, ocorre hiperativação do eixo HPA, redução da variabilidade cardíaca e
+      prejuízo nas funções executivas. A exposição prolongada ao estresse compromete redes
+      neurais ligadas à atenção, memória e motivação.
+    </p>
+  </div>
+
+  <div id="pilar3" class="tab-content">
+    <p>
+      Estratégias eficazes incluem: técnicas de respiração, reorganização cognitiva breve,
+      ampliação de repertório de coping, definição de limites e fortalecimento da rede de apoio.
+    </p>
+  </div>
+
+  <div id="pilar4" class="tab-content">
+    <p>
+      Buscar suporte psicológico é uma intervenção preventiva e restauradora. Quando a sobrecarga
+      gera prejuízo funcional, acompanhamento profissional é indicado para restabelecer equilíbrio.
+    </p>
+  </div>
+
+  <!-- Meme pequeno -->
+  <div style="text-align:center;margin-top:32px;opacity:.82;">
+    <img src="./images/meme4.jpg" alt="Humor leve sobre lidar com o caos" style="max-width:170px;">
+    <p style="font-size:.75rem;color:var(--muted);margin-top:6px;">
+      Um lembrete suave de que ninguém administra tudo sozinho.
+    </p>
+  </div>
+
+</section>
+
+<!-- ============================
+     INTERAÇÃO DAS ABAS
+     ============================ -->
+<script>
+  function openTab(evt, tabId) {
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.getElementById(tabId).style.display = 'block';
+
+    document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+    evt.currentTarget.classList.add('active');
+  }
+</script>
+<!-- ============================
+     FERRAMENTAS INTERATIVAS
+     ============================ -->
+<section id="ferramentas">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Ferramentas de Regulação</span>
+  </div>
+
+  <h2 class="section-title">Ferramentas interativas de estabilização emocional</h2>
+
+  <p class="section-subtitle">
+    Recursos embasados em psicologia clínica e neurociência para restaurar regulação,
+    reduzir hiperativação e aumentar clareza interna.
+  </p>
+
+  <!-- Respiração -->
+  <div class="card-soft" style="margin-top:22px;">
+    <div class="card-label">Ferramenta 1</div>
+    <div class="card-title">Respiração Guiada 4–6–8</div>
+
+    <p class="card-body">
+      Técnica validada para reduzir ativação autonômica e modular o eixo HPA.
+      Acompanhe o ritmo indicado pelo círculo animado.
+    </p>
+
+    <button onclick="startBreathing()" class="btn-primary" style="margin-top:10px;">Iniciar respiração</button>
+
+    <div id="breathingBox" style="display:none;margin-top:20px;text-align:center;">
+      <div id="circle" 
+           style="margin:auto;width:120px;height:120px;border-radius:999px;background:rgba(155,92,255,0.25);
+                  border:2px solid rgba(155,92,255,0.4);transition:all 3s ease;"></div>
+
+      <p id="breathingText" style="margin-top:12px;font-size:.9rem;color:var(--muted);">Prepare-se…</p>
+    </div>
+  </div>
+
+  <!-- Grounding -->
+  <div class="card-soft" style="margin-top:32px;">
+    <div class="card-label">Ferramenta 2</div>
+    <div class="card-title">Grounding 5–4–3–2–1</div>
+
+    <p class="card-body">
+      Prática eficaz para interromper ruminação e restaurar presença.
+      Preencha os campos conforme a orientação.
+    </p>
+
+    <div class="grounding-box" style="margin-top:14px;">
+      <label>5 coisas que você vê:</label>
+      <input type="text" class="input-ground">
+
+      <label>4 coisas que você pode tocar:</label>
+      <input type="text" class="input-ground">
+
+      <label>3 coisas que você ouve:</label>
+      <input type="text" class="input-ground">
+
+      <label>2 coisas que você cheira:</label>
+      <input type="text" class="input-ground">
+
+      <label>1 coisa que você saboreia:</label>
+      <input type="text" class="input-ground">
+
+      <button onclick="finishGrounding()" class="btn-primary" style="margin-top:14px;">
+        Finalizar grounding
+      </button>
+
+      <p id="groundingResult" style="display:none;margin-top:14px;color:var(--muted);font-size:.9rem;">
+        Presença restaurada. Você reduziu a ativação autonômica e reconectou-se ao presente.
       </p>
     </div>
+  </div>
 
+  <!-- Botão SOS -->
+  <div style="text-align:center;margin-top:36px;">
+    <button onclick="openSOS()" class="btn-ghost" style="padding:12px 22px;">
+      Sinal de alerta: preciso de estabilização agora
+    </button>
+  </div>
+
+  <!-- Modal SOS -->
+  <div id="sosModal"
+       style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+              background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:999;
+              align-items:center;justify-content:center;">
+    <div style="background:#11162a;padding:26px;border-radius:18px;max-width:420px;
+                border:1px solid rgba(148,163,184,0.35);box-shadow:var(--shadow-soft);">
+
+      <h3 style="margin-bottom:10px;">Estabilização imediata</h3>
+
+      <p style="font-size:.9rem;color:var(--muted);">
+        • Respire profundamente três vezes.<br>
+        • Nomeie mentalmente a emoção dominante.<br>
+        • Observe um ponto fixo no ambiente.<br>
+        • Lembre-se: isso é uma resposta do corpo, não um fracasso pessoal.
+      </p>
+
+      <button onclick="closeSOS()" class="btn-primary" style="margin-top:16px;">Fechar</button>
+    </div>
   </div>
 </section>
 
-
-<!-- NOVA SEÇÃO — RECURSOS EXTRAS -->
-<section id="extras" style="margin-top:60px">
-  <h2>🎥 Recursos Extras — vídeos & playlist</h2>
-
-  <p style="max-width:600px;color:var(--muted)">
-    Conteúdos que ajudam a entender burnout, mente acelerada e autocuidado.
-  </p>
-
-  <div class="grid-3" style="margin-top:25px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
-
-    <!-- VIDEO 1 -->
-    <div class="card-soft" style="padding:16px;border-radius:18px;text-align:center">
-      <h4>Vídeo 1</h4>
-      <p style="color:var(--muted);font-size:.85rem">O peso invisível do burnout</p>
-      <a href="https://youtu.be/OvSEfm-rbH0?si=8I8QnYfdFu4vfdbW" target="_blank"
-         style="color:#9b5cff;text-decoration:underline">Assistir</a>
-    </div>
-
-    <!-- VIDEO 2 -->
-    <div class="card-soft" style="padding:16px;border-radius:18px;text-align:center">
-      <h4>Vídeo 2</h4>
-      <p style="color:var(--muted);font-size:.85rem">Como a mente entra em colapso</p>
-      <a href="https://youtu.be/vC0aA9hgHwI?si=yXaYXGwYaCXtXd3Q" target="_blank"
-         style="color:#9b5cff;text-decoration:underline">Assistir</a>
-    </div>
-
-    <!-- VIDEO 3 -->
-    <div class="card-soft" style="padding:16px;border-radius:18px;text-align:center">
-      <h4>Vídeo 3</h4>
-      <p style="color:var(--muted);font-size:.85rem">Entendendo a exaustão emocional</p>
-      <a href="https://youtu.be/UJeSe18J1m0?si=BRYXPaDm0MWuixIn" target="_blank"
-         style="color:#9b5cff;text-decoration:underline">Assistir</a>
-    </div>
-
+<!-- ============================
+     PLAYLIST (DESCRIÇÃO REFINADA)
+     ============================ -->
+<section id="playlist">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Reflexão & Foco</span>
   </div>
 
+  <h2 class="section-title">Playlist para reflexão</h2>
 
-  <!-- PLAYLIST -->
-  <div class="card-soft" style="margin-top:25px;padding:18px;border-radius:18px;text-align:center">
-    <h3>🎧 Playlist para relaxar</h3>
-    <p style="color:var(--muted);font-size:.9rem;margin-top:5px">
-      Sons calmos & trilhas para desacelerar a mente.
-    </p>
-    <a href="https://open.spotify.com/playlist/7lAGxD5K1lpDBgUq8yuzAw?si=5VsnlTK7Re6u7oeiZoZuzg"
-       target="_blank"
-       style="color:#9b5cff;text-decoration:underline;margin-top:8px;display:inline-block">
-       Ouvir no Spotify
+  <p class="section-subtitle">
+    Aqui você encontra músicas que dialogam com o burnout e com o peso silencioso do sistema
+    que cobra demais. Canções que ajudam a respirar, entender o próprio ritmo e recuperar
+    um pouco de clareza no meio do caos.
+  </p>
+
+  <div class="card" style="margin-top:20px;">
+    <a href="https://open.spotify.com/playlist/7lAGxD5K1lpDBgUq8yuzAw?si=5VsnlTK7Re6u7oeiZoZuzg" 
+       target="_blank" style="color:var(--accent-strong);font-weight:600;">
+      Abrir playlist no Spotify →
     </a>
   </div>
 
 </section>
-<!-- RECURSOS -->
-<section id="recursos" style="margin-top:60px">
-  <h2>Onde buscar ajuda</h2>
 
-  <p style="max-width:600px;color:var(--muted)">
-    Burnout é sério — mas você não precisa enfrentar sozinho(a).
-  </p>
+<!-- ============================
+     RECURSOS DE APOIO PROFISSIONAL
+     ============================ -->
+<section id="recursos">
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Onde buscar ajuda</span>
+  </div>
 
-  <div class="grid-3" style="margin-top:25px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+  <h2 class="section-title">Apoio psicológico e atendimento profissional</h2>
 
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <h4>CVV — Apoio imediato</h4>
-      <p style="color:var(--muted)">
-        Ligue <strong>188</strong> — atendimento 24h, gratuito.  
-        Ideal para momentos de crise emocional.
+  <div class="grid-3" style="margin-top:32px;">
+
+    <div class="card">
+      <div class="card-label">Emergência emocional</div>
+      <h3 class="card-title">CVV — Centro de Valorização da Vida</h3>
+      <p class="card-body">
+        Atendimento 24h pelo número <strong>188</strong> ou pelo site oficial.  
+        Indicado para momentos de crise ou risco emocional.
       </p>
     </div>
 
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <h4>Atendimento público</h4>
-      <p style="color:var(--muted)">
-        Procure um CAPS ou unidade de saúde da sua cidade.  
-        Há profissionais preparados para ajudar.
+    <div class="card">
+      <div class="card-label">Atendimento público</div>
+      <h3 class="card-title">SUS — CAPS e Unidades Básicas</h3>
+      <p class="card-body">
+        Serviços especializados em saúde mental, acolhimento, psicoterapia e suporte comunitário.
       </p>
     </div>
 
-    <div class="card-soft" style="padding:18px;border-radius:18px">
-      <h4>Atendimento online</h4>
-      <p style="color:var(--muted)">
-        Plataformas de terapia oferecem valores acessíveis  
-        e psicólogos disponíveis rapidamente.
+    <div class="card">
+      <div class="card-label">Online</div>
+      <h3 class="card-title">Plataformas de terapia</h3>
+      <p class="card-body">
+        Alternativa acessível para acompanhamento psicológico contínuo.
       </p>
     </div>
 
   </div>
 </section>
 
-
-<!-- LIVROS RECOMENDADOS -->
-<section id="livros-extra" style="margin-top:60px">
-  <h2>Leituras recomendadas</h2>
-
-  <p style="max-width:600px;color:var(--muted)">
-    Livros para reforçar autocuidado e compreensão emocional.
+<!-- ============================
+     RODAPÉ PROFISSIONAL
+     ============================ -->
+<footer style="margin-top:80px;text-align:center;color:var(--muted);">
+  <p style="font-size:.9rem;">
+    “Cuidar da saúde mental não é luxo — é responsabilidade.”
   </p>
 
-  <div class="grid-3" style="margin-top:25px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
-
-    <div class="card-soft" style="padding:16px;border-radius:18px;text-align:center">
-      <img src="./images/livro_corpo_fala.jpg"
-           style="height:200px;width:100%;object-fit:cover;border-radius:14px;margin-bottom:12px">
-      <h4>O Corpo Fala</h4>
-      <p style="color:var(--muted)">Como emoções viram sintomas físicos.</p>
-    </div>
-
-    <div class="card-soft" style="padding:16px;border-radius:18px;text-align:center">
-      <img src="./images/livro_coragem_ser_imperfeito.jpg"
-           style="height:200px;width:100%;object-fit:cover;border-radius:14px;margin-bottom:12px">
-      <h4>A Coragem de Ser Imperfeito</h4>
-      <p style="color:var(--muted)">Um convite à vulnerabilidade sem culpa.</p>
-    </div>
-
-    <div class="card-soft" style="padding:16px;border-radius:18px;text-align:center">
-      <img src="./images/livro_milagre_da_manha.jpg"
-           style="height:200px;width:100%;object-fit:cover;border-radius:14px;margin-bottom:12px">
-      <h4>O Milagre da Manhã</h4>
-      <p style="color:var(--muted)">Hábitos para recuperar energia mental.</p>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- RODAPÉ -->
-<footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--muted)">
-
-  <p style="font-size:.9rem;color:#ccc">
-    “Cuidar da saúde mental não é luxo — é sobrevivência.”
+  <p style="margin-top:6px;font-size:.75rem;">
+    Projeto acadêmico desenvolvido por estudantes da Unochapecó.
   </p>
 
-  <p style="margin-top:10px;font-size:.75rem">
-    Projeto desenvolvido por estudantes da <strong>Unochapecó</strong>.
-  </p>
-
-  <img src="./images/unochapeco.png"
-       alt="Logo Unochapecó"
-       style="width:120px;margin:15px auto;opacity:.7;display:block">
-
-  <p style="font-size:.7rem;opacity:.5;margin-top:10px">
-    Criado por <strong>Ricardo</strong>
-  </p>
-
+  <img src="./images/unochapeco.png" alt="Logo da Unochapecó" 
+       style="width:120px;opacity:.7;margin-top:10px;">
 </footer>
 
-</main>
-
+<!-- ============================
+     SCRIPTS DAS FERRAMENTAS
+     ============================ -->
 <script>
-  // Sombra da navbar ao rolar
-  document.addEventListener("scroll", () => {
-    const nav = document.querySelector(".navbar");
-    nav.style.boxShadow = window.scrollY > 10
-      ? "0 8px 25px rgba(0,0,0,0.4)"
-      : "none";
-  });
-</script>
+  /* Respiração Guiada */
+  function startBreathing() {
+    document.getElementById("breathingBox").style.display = "block";
+    const circle = document.getElementById("circle");
+    const txt = document.getElementById("breathingText");
 
-</body>
-</html>
+    let cycle = 0;
+
+    function animate() {
+      cycle++;
+
+      txt.textContent = "Inspire (4s)";
+      circle.style.transform = "scale(1.15)";
+      setTimeout(() => {
+        txt.textContent = "Segure (6s)";
+        circle.style.transform = "scale(1.25)";
+
+        setTimeout(() => {
+          txt.textContent = "Solte (8s)";
+          circle.style.transform = "scale(0.9)";
+
+          setTimeout(() => {
+            if (cycle < 4) animate();
+            else txt.textContent = "Ciclo concluído.";
+          }, 8000);
+
+        }, 6000);
+
+      }, 4000);
+    }
+
+    animate();
+  }
+
+  /* Grounding */
+  function finishGrounding() {
+    document.getElementById("groundingResult").style.display = "block";
+  }
+
+  /* SOS */
+  function openSOS() {
+    document.getElementById("sosModal").style.display = "flex";
+  }
+  function closeSOS() {
+    document.getElementById("sosModal").style.display = "none";
+  }
+</script>
