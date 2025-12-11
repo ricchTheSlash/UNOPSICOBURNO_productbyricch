@@ -308,8 +308,8 @@ body {
     </p>
 
     <div class="hero-cta-row">
-      <button class="btn-primary" onclick="document.getElementById('guia').scrollIntoView({behavior:'smooth'})"
-        Auto-check rápido ➜
+      <button class="btn-primary" onclick="document.getElementById('checkup').scrollIntoView({behavior:'smooth'})">
+       Auto-check rápido ➜
       </button>
 
       <button class="btn-ghost" onclick="document.getElementById('guia').scrollIntoView({behavior:'smooth'})">
@@ -844,6 +844,140 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   }
 });
 </script>
+  <!-- ======================= -->
+<!-- SEÇÃO: AUTO-CHECK MODERNO -->
+<!-- ======================= -->
+
+<section id="checkup" class="reveal" style="margin-top:140px;">
+
+  <div class="section-label">
+    <span class="section-label-dot"></span>
+    <span>Autoavaliação guiada</span>
+  </div>
+
+  <h2 class="section-title">Auto-check rápido: como está sua bateria emocional?</h2>
+
+  <p class="section-subtitle">
+    Este mini teste não substitui avaliação profissional, mas ajuda você a reconhecer sinais importantes
+    de esgotamento emocional. Responda com sinceridade — não existe resposta certa.
+  </p>
+
+  <style>
+    .check-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 26px;
+      box-shadow: var(--shadow-soft);
+      max-width: 650px;
+      margin: 30px auto;
+    }
+    .check-question {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .check-options label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+    .check-btn {
+      margin-top: 20px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #7d5cff, #be7aff);
+      color: white;
+      font-size: .9rem;
+      transition: .25s ease;
+    }
+    .check-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+    .check-result {
+      margin-top: 26px;
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      display:none;
+    }
+  </style>
+
+  <div class="check-card reveal">
+    <div class="check-question">
+      Nos últimos dias, você tem sentido dificuldade para descansar mesmo quando tenta?
+    </div>
+
+    <div class="check-options">
+      <label><input type="radio" name="q1" value="sim"> Sim</label>
+      <label><input type="radio" name="q1" value="nao"> Não</label>
+    </div>
+
+    <div class="check-question">
+      Atividades simples parecem exigir mais energia que o normal?
+    </div>
+
+    <div class="check-options">
+      <label><input type="radio" name="q2" value="sim"> Sim</label>
+      <label><input type="radio" name="q2" value="nao"> Não</label>
+    </div>
+
+    <div class="check-question">
+      Você sente sua mente acelerada ou em “alerta” constante?
+    </div>
+
+    <div class="check-options">
+      <label><input type="radio" name="q3" value="sim"> Sim</label>
+      <label><input type="radio" name="q3" value="nao"> Não</label>
+    </div>
+
+    <button class="check-btn" onclick="calculateCheckup()">Ver resultado</button>
+
+    <div id="checkResult" class="check-result"></div>
+  </div>
+
+</section>
+
+<script>
+function calculateCheckup() {
+  const q1 = document.querySelector('input[name="q1"]:checked');
+  const q2 = document.querySelector('input[name="q2"]:checked');
+  const q3 = document.querySelector('input[name="q3"]:checked');
+
+  const resultDiv = document.getElementById("checkResult");
+
+  if(!q1 || !q2 || !q3){
+    resultDiv.style.display = "block";
+    resultDiv.innerHTML = "<strong>Por favor, responda todas as perguntas.</strong>";
+    return;
+  }
+
+  const score = [q1.value, q2.value, q3.value].filter(v => v === "sim").length;
+
+  resultDiv.style.display = "block";
+
+  if(score === 0){
+    resultDiv.innerHTML = "<strong>Nível baixo de sobrecarga.</strong><br> Continue se observando, mas sua bateria emocional está relativamente estável.";
+  } 
+  else if(score === 1){
+    resultDiv.innerHTML = "<strong>Leve sinal de alerta.</strong><br> Seu corpo está começando a mostrar cansaço. Pequenas pausas podem fazer diferença.";
+  } 
+  else if(score === 2){
+    resultDiv.innerHTML = "<strong>Sobrecarga moderada.</strong><br> Seu sistema está pedindo atenção. Considere reorganizar sua rotina e usar as ferramentas de regulação.";
+  } 
+  else {
+    resultDiv.innerHTML = "<strong>Alto risco de burnout.</strong><br> Este é um momento importante para buscar apoio emocional e reduzir demandas.";
+  }
+}
+</script>
+
 <!-- =========================== -->
 <!-- SEÇÃO: FERRAMENTAS INTERATIVAS -->
 <!-- =========================== -->
@@ -1166,4 +1300,5 @@ breathEl?.addEventListener("click", () => {
   breathe();
 });
 </script>
+
 
