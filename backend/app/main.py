@@ -1,39 +1,81 @@
 """
 Ponto de entrada do backend.
 
-Nesta fase (PR #5a) temos apenas:
-  - `GET /health`: confirma que o servidor sobe e que o banco responde.
-  - Lifespan que descarta o engine no shutdown (libera o pool do SQLAlchemy).
+Wiring:
+  - Loguru com mascaramento de PII (setup_logging)
+  - CORS (lista de origens vem do .env via settings)
+  - Rate limit (slowapi)
+  - Routers: auth + invites
+  - Health check com SELECT 1 no banco
 
-Rotas de negócio (auth, projetos, RDO, assinaturas) entram nas próximas PRs.
+Próxima PR (#6) liga o router de projects.
 """
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from sqlalchemy import text
+from loguru import logger
 
+from app.config import settings
 from app.database import engine
+from app.logging_setup import setup_logging
+from app.rate_limit import limiter
+from app.routers import auth as auth_router
+from app.routers import invites as invites_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: SQLAlchemy abre conexões lazy na primeira query; nada a fazer aqui.
+    setup_logging()
+    logger.info(f"CGH SaaS startup — env={settings.APP_ENV}")
     try:
         yield
     finally:
-        # Shutdown: devolve as conexões ao Postgres educadamente.
         await engine.dispose()
+        logger.info("CGH SaaS shutdown — engine descartado")
 
 
-app = FastAPI(title="CGH SaaS", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="CGH SaaS", version="0.2.0", lifespan=lifespan)
 
 
+# --- Rate limit ---------------------------------------------------------------
+# Limiter precisa ficar no state pro decorator @limiter.limit funcionar.
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+
+# slowapi devolve 429 por padrão; o handler abaixo formata como JSON.
+@app.exception_handler(RateLimitExceeded)
+async def _rate_limit_handler(request, exc):
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "muitas tentativas — aguarde um pouco"},
+    )
+
+
+# --- CORS ---------------------------------------------------------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# --- Routers ------------------------------------------------------------------
+app.include_router(auth_router.router)
+app.include_router(invites_router.router)
+
+
+# --- Health check -------------------------------------------------------------
 @app.get("/health")
 async def health() -> dict[str, str]:
-    """
-    Health check executável: tenta um `SELECT 1` no banco.
-    Se o Postgres estiver fora, retorna 503 (graças à exceção do engine).
-    """
+    """Tenta um SELECT 1 no banco; 503 se DB cair."""
     async with engine.connect() as conn:
         await conn.execute(text("SELECT 1"))
     return {"status": "ok"}

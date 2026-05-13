@@ -12,20 +12,39 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    # --- Banco ----------------------------------------------------------------
     # URL completa do Postgres (Supabase fornece pronta no painel).
     DATABASE_URL: str
 
-    # Credenciais do Asaas. Em desenvolvimento, use a chave do sandbox.
+    # --- Asaas ----------------------------------------------------------------
     ASAAS_API_KEY: str
     ASAAS_BASE_URL: str = "https://sandbox.asaas.com/api"
 
-    # Útil para liberar/bloquear comportamentos por ambiente.
+    # --- App ------------------------------------------------------------------
     APP_ENV: str = "development"
 
-    # Diz ao pydantic-settings: leia o arquivo .env na raiz do backend.
+    # --- JWT ------------------------------------------------------------------
+    # Segredo de assinatura dos JWTs. EM PRODUÇÃO use um valor longo (>= 32
+    # bytes aleatórios) e único por ambiente. Nunca commitar.
+    #   python -c "import secrets; print(secrets.token_urlsafe(48))"
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_MINUTES: int = 15          # access curto (limita estrago em roubo)
+    JWT_REFRESH_DAYS: int = 7             # refresh longo (UX); rotaciona a cada uso
+
+    # --- Convites -------------------------------------------------------------
+    INVITE_EXPIRATION_HOURS: int = 48     # convite expira em 48h por padrão
+
+    # --- CORS -----------------------------------------------------------------
+    # Lista separada por vírgula. Em dev: "http://localhost:5173" (Vite).
+    # Em prod: domínio do frontend.
+    CORS_ALLOW_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [origin.strip() for origin in self.CORS_ALLOW_ORIGINS.split(",") if origin.strip()]
 
-# Instanciado uma única vez no startup. Importe e use:
-#   from app.config import settings
+
 settings = Settings()

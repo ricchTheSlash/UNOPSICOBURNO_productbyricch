@@ -1,28 +1,54 @@
 # Backend — CGH SaaS
 
-Backend em **Python + FastAPI** com **SQLAlchemy 2.0 async + asyncpg** e
-**Alembic** para migrations. Banco em **Postgres** (Supabase em produção).
+Backend em **Python + FastAPI** com **SQLAlchemy 2.0 async + asyncpg**,
+**Alembic** para migrations, **argon2id + JWT** para auth, **slowapi** para
+rate limit e **Loguru** com mascaramento de PII para logs. Banco em
+**Postgres** (Supabase em produção).
 
 ## Estrutura
 
 ```
 backend/
 ├── app/
-│   ├── main.py           # FastAPI app + /health + lifespan do engine
-│   ├── config.py         # Settings carregados do .env (pydantic-settings)
-│   ├── database.py       # Engine async + SessionLocal + get_db dependency
-│   ├── models.py         # Modelos SQLAlchemy 2.0 (Company, User, CGHProject, DailyReport, Subscription)
+│   ├── main.py             # FastAPI app + wiring (CORS, rate limit, routers, lifespan)
+│   ├── config.py           # Settings via pydantic-settings (.env)
+│   ├── database.py         # Engine async + SessionLocal
+│   ├── models.py           # Modelos SQLAlchemy (Company, User, CGHProject, DailyReport, Subscription, Invite, RefreshToken)
+│   ├── security.py         # argon2id + JWT encode/decode + tokens opacos
+│   ├── deps.py             # get_current_user, require_role, require_active_subscription
+│   ├── rate_limit.py       # slowapi Limiter
+│   ├── logging_setup.py    # Loguru + masking de PII (e-mail, CPF, JWT)
+│   ├── schemas/
+│   │   └── auth.py         # Schemas Pydantic (Register, Login, Refresh, Invite*)
+│   ├── routers/
+│   │   ├── auth.py         # /auth/register, /login, /refresh, /logout
+│   │   └── invites.py      # /auth/invites, /auth/invites/{token}/accept
 │   └── services/
-│       └── asaas.py      # Cliente HTTP do Asaas (create_customer)
+│       └── asaas.py        # Cliente HTTP do Asaas (create_customer)
 ├── alembic/
-│   ├── env.py            # Runtime async-aware do Alembic
-│   ├── script.py.mako    # Template usado pelo `alembic revision`
+│   ├── env.py
+│   ├── script.py.mako
 │   └── versions/
-│       └── 20260513_1500_initial_schema.py
-├── alembic.ini           # Config do Alembic (URL lida via env.py)
+│       ├── 20260513_1500_initial_schema.py
+│       └── 20260513_1700_auth_invites_refresh_tokens.py
+├── alembic.ini
 ├── requirements.txt
 └── .env.example
 ```
+
+## Endpoints de auth (PR #5b)
+
+| Método | Path | Auth | Rate limit | O que faz |
+|---|---|---|---|---|
+| POST | `/auth/register` | público | 5/min/IP | Cria `company` + primeiro `user(role=admin)`; devolve par de tokens |
+| POST | `/auth/login` | público | 10/min/IP | Troca senha por par (access + refresh) |
+| POST | `/auth/refresh` | público (token no body) | — | Rotaciona: revoga refresh antigo, emite par novo |
+| POST | `/auth/logout` | bearer access | — | Revoga refresh (idempotente) |
+| POST | `/auth/invites` | bearer access (role=admin) | — | Cria convite p/ engineer/client; devolve token cru uma vez |
+| POST | `/auth/invites/{token}/accept` | público | 10/min/IP | Destinatário define senha, vira user da company |
+| GET | `/health` | público | — | `SELECT 1` no banco; 200 se OK |
+
+Documentação interativa: `/docs` (Swagger UI), `/redoc`.
 
 ## Modelo de dados (PR #5a)
 
