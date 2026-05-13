@@ -1,42 +1,74 @@
 """
-Camada de acesso ao banco — bem fininha de propósito.
+Acesso ao Postgres via SQLAlchemy 2.0 async + asyncpg.
 
-Usamos `psycopg` (driver moderno do Postgres em Python) com um POOL de conexões.
+Por que SQLAlchemy 2.0 async em vez do psycopg cru:
+  - ORM dá tipagem estática nos modelos (Mapped[T]); IDE pega `user.emial` antes
+    de virar bug em produção.
+  - Alembic gera migrations a partir dos modelos (autogenerate).
+  - Mesmo padrão usado em fastapi/fullstack-fastapi-template, Sentry, e na
+    maioria das stacks Python modernas — você aprende o que o mercado usa.
 
-Por que um pool, e não abrir conexão por requisição?
-  - Abrir/fechar conexão TCP+TLS com o Supabase custa centenas de ms.
-  - Um pool mantém N conexões prontas e empresta a quem precisar.
-  - Em FastAPI, o pool nasce no startup e morre no shutdown da aplicação.
+Por que asyncpg como driver:
+  - É o driver Postgres mais rápido em Python (~30% mais rápido que psycopg
+    em queries pesadas). Não bloqueia o event loop do FastAPI.
 
-Como usar (próximas fases):
-    async with get_conn() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute("SELECT 1")
-            row = await cur.fetchone()
+Sobre a "tradução" da DATABASE_URL:
+  O Supabase entrega URLs no formato `postgresql://...` (padrão do psql).
+  SQLAlchemy async exige `postgresql+asyncpg://...` para saber qual driver usar.
+  Reescrevemos transparentemente para você não precisar lembrar disso no .env.
 """
-from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-from psycopg import AsyncConnection
-from psycopg_pool import AsyncConnectionPool
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from app.config import settings
 
 
-# Pool global. min_size=1 para sempre haver uma conexão "morna"; max_size=10
-# é confortável para um MVP. Ajuste conforme tráfego real.
-pool: AsyncConnectionPool = AsyncConnectionPool(
-    conninfo=settings.DATABASE_URL,
-    min_size=1,
-    max_size=10,
-    # open=False: não tenta conectar ao importar este módulo;
-    # quem decide quando abrir é o lifespan do FastAPI (main.py).
-    open=False,
+def _to_asyncpg_url(url: str) -> str:
+    """
+    Aceita `postgresql://` ou `postgres://` (formato do Supabase/Heroku) e
+    devolve no formato que o SQLAlchemy async entende: `postgresql+asyncpg://`.
+    Se a URL já estiver no formato `+asyncpg`, devolve como veio.
+    """
+    if url.startswith("postgresql+asyncpg://"):
+        return url
+    if url.startswith("postgresql://"):
+        return "postgresql+asyncpg://" + url[len("postgresql://") :]
+    if url.startswith("postgres://"):
+        return "postgresql+asyncpg://" + url[len("postgres://") :]
+    return url
+
+
+# Engine único do processo. `pool_pre_ping=True` evita o clássico "server closed
+# the connection unexpectedly" quando o Postgres reseta conexões ociosas.
+engine: AsyncEngine = create_async_engine(
+    _to_asyncpg_url(settings.DATABASE_URL),
+    echo=False,
+    pool_pre_ping=True,
+    pool_size=5,
+    max_overflow=5,
+)
+
+# Factory de sessões. `expire_on_commit=False` para que objetos retornados por
+# rotas continuem utilizáveis depois do commit (padrão recomendado em FastAPI).
+SessionLocal: async_sessionmaker[AsyncSession] = async_sessionmaker(
+    engine, expire_on_commit=False
 )
 
 
-@asynccontextmanager
-async def get_conn() -> AsyncIterator[AsyncConnection]:
-    """Empresta uma conexão do pool e devolve ao final do bloco `async with`."""
-    async with pool.connection() as conn:
-        yield conn
+async def get_db() -> AsyncIterator[AsyncSession]:
+    """
+    Dependency FastAPI: abre uma sessão por requisição e fecha ao final.
+
+    Uso (próximas PRs):
+        @app.get("/projects")
+        async def list_projects(db: AsyncSession = Depends(get_db)):
+            ...
+    """
+    async with SessionLocal() as session:
+        yield session
