@@ -176,13 +176,6 @@ class CGHProject(Base):
         index=True,
     )
 
-    # Investidor/cliente final dono da obra (papel 'client'). Opcional aqui;
-    # atribuição completa de equipe (engineers/clients) virá em `project_members` (PR #6).
-    client_user_id: Mapped[uuid.UUID | None] = mapped_column(
-        PGUUID(as_uuid=True),
-        ForeignKey("users.id", ondelete="SET NULL"),
-    )
-
     name: Mapped[str] = mapped_column(Text, nullable=False)
     location: Mapped[str | None] = mapped_column(Text)
     installed_power_kw: Mapped[float | None] = mapped_column(Numeric(10, 2))
@@ -221,6 +214,49 @@ class CGHProject(Base):
 
     company: Mapped["Company"] = relationship(back_populates="projects")
     reports: Mapped[list["DailyReport"]] = relationship(back_populates="project")
+    members: Mapped[list["ProjectMember"]] = relationship(
+        back_populates="project", cascade="all, delete-orphan"
+    )
+
+
+# =============================================================================
+# ProjectMember  -  N:N entre users e cgh_projects.
+# =============================================================================
+# Quem participa de qual obra. O papel global do user (admin/engineer/client)
+# já diz O QUE ele faz; este registro só estabelece A QUAIS projetos ele tem
+# acesso. Admins enxergam tudo da sua company sem precisar de project_members.
+class ProjectMember(Base):
+    __tablename__ = "project_members"
+    __table_args__ = (
+        UniqueConstraint("project_id", "user_id", name="uq_project_members_project_user"),
+    )
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+
+    project_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("cgh_projects.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    # Admin que atribuiu. SET NULL preserva histórico mesmo que o admin saia.
+    assigned_by_user_id: Mapped[uuid.UUID | None] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="SET NULL"),
+    )
+
+    assigned_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("NOW()")
+    )
+
+    project: Mapped["CGHProject"] = relationship(back_populates="members")
 
 
 # =============================================================================
