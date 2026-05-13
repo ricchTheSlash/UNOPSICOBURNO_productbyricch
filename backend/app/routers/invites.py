@@ -24,7 +24,7 @@ from loguru import logger
 
 from app.config import settings
 from app.deps import get_db, require_role
-from app.models import Invite, User
+from app.models import Company, Invite, User
 from app.rate_limit import limiter
 from app.routers.auth import _issue_token_pair
 from app.schemas.auth import (
@@ -34,6 +34,7 @@ from app.schemas.auth import (
     TokenResponse,
 )
 from app.security import generate_opaque_token, hash_password, hash_token
+from app.services.email import send_invite_email
 
 
 router = APIRouter(prefix="/auth/invites", tags=["invites"])
@@ -104,12 +105,33 @@ async def create_invite(
         f"to={payload.email} role={payload.role}"
     )
 
+    # Tenta enviar e-mail. Falha NÃO derruba a rota — o convite já existe;
+    # admin pode reenviar manualmente (endpoint /resend virá numa PR futura).
+    accept_url = f"{settings.INVITE_ACCEPT_URL_BASE.rstrip('/')}/{token}"
+    company_name = await db.scalar(
+        select(Company.name).where(Company.id == admin.company_id)
+    )
+    email_sent = await send_invite_email(
+        to=payload.email,
+        accept_url=accept_url,
+        role=payload.role,
+        company_name=company_name or "sua empresa",
+        expires_hours=settings.INVITE_EXPIRATION_HOURS,
+    )
+    if not email_sent:
+        logger.warning(f"invite {invite.id}: e-mail falhou; admin pode reenviar")
+
+    # Em dev devolvemos token + accept_url no body (admin pode copiar/colar
+    # pra testar sem inbox). Em prod, esses campos saem como None.
+    is_dev = settings.APP_ENV == "development"
     return InviteCreateResponse(
         invite_id=invite.id,
         email=invite.email,
         role=invite.role,  # type: ignore[arg-type]
-        token=token,  # cru — só aparece aqui
         expires_at=expires_at,
+        email_sent=email_sent,
+        accept_url=accept_url if is_dev else None,
+        token=token if is_dev else None,
     )
 
 

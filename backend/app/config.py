@@ -35,6 +35,19 @@ class Settings(BaseSettings):
     # --- Convites -------------------------------------------------------------
     INVITE_EXPIRATION_HOURS: int = 48     # convite expira em 48h por padrão
 
+    # URL-base do frontend onde o destinatário do convite cai. O token será
+    # anexado: `{INVITE_ACCEPT_URL_BASE}/{token}`. Em dev, aponta pro Vite.
+    INVITE_ACCEPT_URL_BASE: str = "http://localhost:5173/invites"
+
+    # --- E-mail ---------------------------------------------------------------
+    # Provider: "resend" usa a API do Resend; "console" só loga (dev).
+    EMAIL_PROVIDER: str = "console"
+
+    # Credenciais Resend (https://resend.com). Free tier: 100/dia, 3000/mês.
+    # Em produção, RESEND_FROM precisa de domínio verificado.
+    RESEND_API_KEY: str = ""
+    RESEND_FROM: str = "CGH SaaS <onboarding@resend.dev>"
+
     # --- CORS -----------------------------------------------------------------
     # Lista separada por vírgula. Em dev: "http://localhost:5173" (Vite).
     # Em prod: domínio do frontend.

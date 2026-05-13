@@ -10,7 +10,7 @@ Documento vivo. Atualizado a cada PR que toca segurança.
 | JWT | HS256, access 15min + refresh 7 dias | Segredo no `.env`, único por ambiente |
 | Rotação de refresh | Sim — cada refresh emite novo par + revoga o antigo | Detecção de reuso fica em backlog |
 | Storage de refresh | `refresh_tokens.jti_hash` (SHA-256 do JTI) | Permite revogação |
-| Convites | Token opaco de 32 bytes (`secrets.token_urlsafe`), só o hash no banco | Expira em 48h, uso único |
+| Convites | Token opaco de 32 bytes (`secrets.token_urlsafe`), só o hash no banco | Expira em 48h, uso único; enviado por e-mail (Resend) |
 | Rate limit | `slowapi` em memória — 5/min em `/register`, 10/min em `/login` e `/invites/.../accept` | Em prod com múltiplas réplicas, migrar pra Redis |
 | CORS | Lista explícita via `CORS_ALLOW_ORIGINS` | NÃO usar `*` em produção |
 | TLS | Responsabilidade do reverse proxy (Nginx + Let's Encrypt na VPS) | Não tratado a nível de app |
@@ -54,6 +54,7 @@ Documento vivo. Atualizado a cada PR que toca segurança.
 - [x] `.env` no `.gitignore` (segredo nunca commitado)
 - [x] `.env.example` documenta as chaves sem valores reais
 - [x] Loguru mascara PII (e-mail, CPF, CNPJ, JWT) antes de qualquer sink
+- [x] Token do convite NÃO aparece na resposta da API em produção (`APP_ENV=production`); somente em desenvolvimento, pra UX de teste
 - [ ] Rotação de `JWT_SECRET_KEY` sem invalidar todos os logins (precisa key ID)
 - [ ] Backup de banco automatizado (responsabilidade do Supabase managed)
 
