@@ -24,7 +24,8 @@ backend/
 │   │   ├── auth.py         # /auth/register, /login, /refresh, /logout
 │   │   └── invites.py      # /auth/invites, /auth/invites/{token}/accept
 │   └── services/
-│       └── asaas.py        # Cliente HTTP do Asaas (create_customer)
+│       ├── asaas.py        # Cliente HTTP do Asaas (create_customer)
+│       └── email.py        # EmailProvider (Console + Resend) + send_invite_email
 ├── alembic/
 │   ├── env.py
 │   ├── script.py.mako
@@ -133,11 +134,35 @@ postgresql+asyncpg://user:pass@host:5432/db  # formato nativo SQLAlchemy
 O código reescreve internamente para `+asyncpg` quando necessário. Você cola
 a URL exatamente como o Supabase te entrega.
 
+## Envio de e-mail dos convites (PR #5c)
+
+A rota `POST /auth/invites` dispara um e-mail para o destinatário com o
+link de aceitação. Provider configurável via `EMAIL_PROVIDER` no `.env`:
+
+| Provider | O que faz | Quando usar |
+|---|---|---|
+| `console` (default) | Loga o conteúdo do e-mail no console + `logs/app.log` | Dev local: testa sem precisar de inbox |
+| `resend` | Envia via API do [Resend](https://resend.com) | Staging / produção |
+
+**Setup do Resend (3 passos, 5 minutos):**
+
+1. Crie conta grátis em https://resend.com (free tier: 100/dia, 3000/mês).
+2. Gere uma API key em **Settings → API Keys**.
+3. No `.env`:
+   ```
+   EMAIL_PROVIDER=resend
+   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxx
+   RESEND_FROM=CGH SaaS <onboarding@resend.dev>   # dev/teste
+   # Em produção, troque por um endereço de domínio verificado.
+   ```
+
+**Em desenvolvimento** (`APP_ENV=development`) a resposta de `POST /auth/invites`
+inclui também `token` e `accept_url` no body — útil pra testar sem inbox.
+**Em produção** (`APP_ENV=production`), esses campos saem como `null`: o
+e-mail é a única forma de o destinatário obter o link.
+
 ## Próximas fases
 
-- **PR #5b** — Auth completa (argon2 + JWT access/refresh) + invites por
-  e-mail + middleware `require_subscription` + rate limit + Loguru +
-  `SECURITY.md`.
 - **PR #6** — CRUD de projetos + `project_members` (atribuir engineers e
   clients a projetos específicos).
 - **PR #7** — `workers` + `attendance` + criação/listagem de RDOs.

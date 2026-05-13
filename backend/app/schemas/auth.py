@@ -75,16 +75,21 @@ class InviteCreateRequest(BaseModel):
 
 class InviteCreateResponse(BaseModel):
     """
-    Após criar um convite, devolvemos o TOKEN CRU (única vez que ele aparece).
-    Em PR #5c plugaremos envio por e-mail; até lá o admin copia/cola o link
-    e envia manualmente.
+    Após criar um convite, devolvemos os metadados + status do envio de e-mail.
+
+    O TOKEN CRU é incluído APENAS em desenvolvimento (`APP_ENV=development`):
+    é prático pro admin copiar o link e testar sem precisar de inbox. Em
+    produção (`APP_ENV=production`), o token sai do banco apenas como hash
+    e do servidor apenas via e-mail — a resposta da rota não o expõe.
     """
 
     invite_id: uuid.UUID
     email: EmailStr
     role: Literal["engineer", "client"]
-    token: str          # cru — não fica no banco, só o hash
     expires_at: datetime
+    email_sent: bool                  # se o provider devolveu sucesso
+    accept_url: str | None = None     # presente em dev; ausente em prod
+    token: str | None = None          # presente em dev; ausente em prod
 
 
 class InviteAcceptRequest(BaseModel):
