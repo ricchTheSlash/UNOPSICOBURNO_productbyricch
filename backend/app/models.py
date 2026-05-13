@@ -108,6 +108,12 @@ class User(Base):
     full_name: Mapped[str] = mapped_column(Text, nullable=False)
     role: Mapped[str] = mapped_column(Text, nullable=False)
 
+    # Soft-delete / suspensão. Middleware checa esta flag; usuários inativos
+    # não conseguem logar nem usar refresh.
+    is_active: Mapped[bool] = mapped_column(
+        nullable=False, server_default=text("true")
+    )
+
     phone: Mapped[str | None] = mapped_column(Text)
     cpf_cnpj: Mapped[str | None] = mapped_column(Text)
 
@@ -308,3 +314,84 @@ class Subscription(Base):
     )
 
     company: Mapped["Company"] = relationship(back_populates="subscriptions")
+
+
+# =============================================================================
+# Invite  -  convite por e-mail para engineer/client entrar numa company.
+# =============================================================================
+# Modelo: o admin gera um convite com (email, role); o sistema devolve um
+# token aleatório criptograficamente forte (32 bytes). Guardamos apenas o
+# HASH do token (sha256) — se o banco vazar, o token cru não dá pra reverter.
+# O destinatário acessa /auth/invites/{token}/accept com a senha que escolher.
+class Invite(Base):
+    __tablename__ = "invites"
+    __table_args__ = (
+        CheckConstraint(
+            "role IN ('engineer', 'client')",
+            name="ck_invites_role",
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+
+    company_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("companies.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    # Quem criou o convite (admin da company). SET NULL preserva o convite
+    # mesmo que o admin saia da empresa.
+    invited_by_user_id: Mapped[uuid.UUID | None] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="SET NULL"),
+    )
+
+    email: Mapped[str] = mapped_column(CITEXT, nullable=False)
+    role: Mapped[str] = mapped_column(Text, nullable=False)
+
+    # SHA-256 do token cru. Só o destinatário tem o token cru (foi enviado por
+    # e-mail / copiado pelo admin no momento da geração).
+    token_hash: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+    # Marca de uso (idempotência): se já foi aceito, segunda tentativa falha.
+    accepted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("NOW()")
+    )
+
+
+# =============================================================================
+# RefreshToken  -  rastreio de refresh tokens emitidos (permite revogação).
+# =============================================================================
+# JWT puro stateless seria mais simples, mas perde a capacidade de invalidar
+# uma sessão (ex.: logout, "deslogar todos os dispositivos", admin
+# suspendendo um user). Guardamos só o hash do JTI (ID único do token):
+# se o banco vazar, ninguém consegue forjar refreshs.
+#
+# Política de rotação: a cada uso de refresh, o token antigo é marcado como
+# revogado e um novo é emitido. Reuso de refresh antigo = sinal de roubo;
+# tratamento (revogar toda a família) virá em PR futura se necessário.
+class RefreshToken(Base):
+    __tablename__ = "refresh_tokens"
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    jti_hash: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("NOW()")
+    )
