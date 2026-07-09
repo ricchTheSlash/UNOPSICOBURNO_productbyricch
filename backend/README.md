@@ -19,10 +19,12 @@ backend/
 │   ├── rate_limit.py       # slowapi Limiter
 │   ├── logging_setup.py    # Loguru + masking de PII (e-mail, CPF, JWT)
 │   ├── schemas/
-│   │   └── auth.py         # Schemas Pydantic (Register, Login, Refresh, Invite*)
+│   │   ├── auth.py         # Schemas Pydantic (Register, Login, Refresh, Invite*)
+│   │   └── projects.py     # ProjectCreate/Update/Response, MemberAddRequest/Response
 │   ├── routers/
 │   │   ├── auth.py         # /auth/register, /login, /refresh, /logout
-│   │   └── invites.py      # /auth/invites, /auth/invites/{token}/accept
+│   │   ├── invites.py      # /auth/invites, /auth/invites/{token}/accept
+│   │   └── projects.py     # /projects CRUD + /projects/{id}/members
 │   └── services/
 │       ├── asaas.py        # Cliente HTTP do Asaas (create_customer)
 │       └── email.py        # EmailProvider (Console + Resend) + send_invite_email
@@ -37,7 +39,9 @@ backend/
 └── .env.example
 ```
 
-## Endpoints de auth (PR #5b)
+## Endpoints
+
+### Auth + invites (PR #5b/#5c)
 
 | Método | Path | Auth | Rate limit | O que faz |
 |---|---|---|---|---|
@@ -45,9 +49,30 @@ backend/
 | POST | `/auth/login` | público | 10/min/IP | Troca senha por par (access + refresh) |
 | POST | `/auth/refresh` | público (token no body) | — | Rotaciona: revoga refresh antigo, emite par novo |
 | POST | `/auth/logout` | bearer access | — | Revoga refresh (idempotente) |
-| POST | `/auth/invites` | bearer access (role=admin) | — | Cria convite p/ engineer/client; devolve token cru uma vez |
+| POST | `/auth/invites` | bearer (admin) | — | Cria convite; dispara e-mail; em dev devolve token+accept_url |
 | POST | `/auth/invites/{token}/accept` | público | 10/min/IP | Destinatário define senha, vira user da company |
-| GET | `/health` | público | — | `SELECT 1` no banco; 200 se OK |
+
+### Projetos (PR #6)
+
+Todas as rotas requerem **assinatura ativa** (`require_active_subscription`,
+402 se inativa) e fazem **tenant isolation** automático (filtra por `company_id`).
+
+| Método | Path | Auth | O que faz |
+|---|---|---|---|
+| POST | `/projects` | bearer (admin) | Cria projeto na company do admin |
+| GET | `/projects` | bearer | Lista: admin vê tudo da company; engineer/client só onde é member |
+| GET | `/projects/{id}` | bearer (com acesso) | Detalhe do projeto. 404 se cross-tenant ou não-member |
+| PATCH | `/projects/{id}` | bearer (admin) | Update parcial (só admin) |
+| DELETE | `/projects/{id}` | bearer (admin) | Hard delete (CASCADE em RDOs e members) |
+| GET | `/projects/{id}/members` | bearer (com acesso) | Lista members do projeto |
+| POST | `/projects/{id}/members` | bearer (admin) | Atribui user (engineer/client) ao projeto |
+| DELETE | `/projects/{id}/members/{user_id}` | bearer (admin) | Remove user (idempotente) |
+
+### Outros
+
+| Método | Path | Auth | O que faz |
+|---|---|---|---|
+| GET | `/health` | público | `SELECT 1` no banco; 200 se OK |
 
 Documentação interativa: `/docs` (Swagger UI), `/redoc`.
 
@@ -59,9 +84,10 @@ Cinco tabelas, todas com **multi-tenancy** via `company_id`:
   middleware de rotas protegidas consulta a cada request).
 - **`users`** — pertencem a uma `company_id`. Papéis: `admin`, `engineer`,
   `client`. E-mail globalmente único (CITEXT, case-insensitive).
-- **`cgh_projects`** — obras. Cada uma de uma `company_id`. Opcionalmente
-  com `client_user_id` (investidor). Atribuição de equipe (engineers extras +
-  clients) virá em `project_members` na PR #6.
+- **`cgh_projects`** — obras. Cada uma pertence a uma `company_id`. Members
+  (engineers e clients atribuídos) ficam em `project_members` (N:N).
+- **`project_members`** — quem participa de qual obra. Admins enxergam tudo
+  da company; engineers/clients só projetos onde estão como member.
 - **`daily_reports`** — RDOs. 1 por projeto por dia (UNIQUE constraint).
   Sem `updated_at` propositalmente: histórico imutável.
 - **`subscriptions`** — espelho local da assinatura no Asaas. Pertence à
@@ -163,8 +189,6 @@ e-mail é a única forma de o destinatário obter o link.
 
 ## Próximas fases
 
-- **PR #6** — CRUD de projetos + `project_members` (atribuir engineers e
-  clients a projetos específicos).
 - **PR #7** — `workers` + `attendance` + criação/listagem de RDOs.
 - **PR #7.5** — Endpoint `POST /subscriptions/checkout` (cria assinatura
   no Asaas).

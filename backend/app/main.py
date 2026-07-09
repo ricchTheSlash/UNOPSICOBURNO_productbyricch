@@ -25,6 +25,7 @@ from app.logging_setup import setup_logging
 from app.rate_limit import limiter
 from app.routers import auth as auth_router
 from app.routers import invites as invites_router
+from app.routers import projects as projects_router
 
 
 @asynccontextmanager
@@ -70,6 +71,7 @@ app.add_middleware(
 # --- Routers ------------------------------------------------------------------
 app.include_router(auth_router.router)
 app.include_router(invites_router.router)
+app.include_router(projects_router.router)
 
 
 # --- Health check -------------------------------------------------------------
