@@ -21,7 +21,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from loguru import logger
 
-from app.deps import get_db, require_active_subscription, require_role
+from app.access import get_project_or_404, user_can_see_project
+from app.deps import get_db, require_active_subscription, require_subscription_and_role
 from app.models import CGHProject, ProjectMember, User
 from app.schemas.projects import (
     MemberAddRequest,
@@ -35,49 +36,12 @@ from app.schemas.projects import (
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
-# --- Helpers ------------------------------------------------------------------
-
-async def _user_can_see_project(db: AsyncSession, user: User, project_id: uuid.UUID) -> bool:
-    """True se o user pode VER esse projeto. Admin: company match. Outros: member."""
-    project = await db.scalar(select(CGHProject).where(CGHProject.id == project_id))
-    if project is None or project.company_id != user.company_id:
-        return False
-    if user.role == "admin":
-        return True
-    member = await db.scalar(
-        select(ProjectMember).where(
-            ProjectMember.project_id == project_id, ProjectMember.user_id == user.id
-        )
-    )
-    return member is not None
-
-
-async def _get_project_or_404(
-    db: AsyncSession, user: User, project_id: uuid.UUID
-) -> CGHProject:
-    """Carrega o projeto com checagem de acesso. 404 se não existir OU usuário
-    não tiver permissão — não distingue (anti-enumeração)."""
-    project = await db.scalar(select(CGHProject).where(CGHProject.id == project_id))
-    if project is None or project.company_id != user.company_id:
-        raise HTTPException(status_code=404, detail="projeto não encontrado")
-    if user.role != "admin":
-        member = await db.scalar(
-            select(ProjectMember).where(
-                ProjectMember.project_id == project_id,
-                ProjectMember.user_id == user.id,
-            )
-        )
-        if member is None:
-            raise HTTPException(status_code=404, detail="projeto não encontrado")
-    return project
-
-
 # --- CRUD projetos ------------------------------------------------------------
 
 @router.post("", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
 async def create_project(
     payload: ProjectCreate,
-    admin: User = Depends(require_role("admin")),
+    admin: User = Depends(require_subscription_and_role("admin")),
     db: AsyncSession = Depends(get_db),
 ) -> CGHProject:
     """Admin cria projeto na company dele."""
@@ -130,14 +94,14 @@ async def get_project(
     user: User = Depends(require_active_subscription),
     db: AsyncSession = Depends(get_db),
 ) -> CGHProject:
-    return await _get_project_or_404(db, user, project_id)
+    return await get_project_or_404(db, user, project_id)
 
 
 @router.patch("/{project_id}", response_model=ProjectResponse)
 async def update_project(
     project_id: uuid.UUID,
     payload: ProjectUpdate,
-    admin: User = Depends(require_role("admin")),
+    admin: User = Depends(require_subscription_and_role("admin")),
     db: AsyncSession = Depends(get_db),
 ) -> CGHProject:
     """Update parcial. Apenas admin pode editar; só dentro da própria company."""
@@ -158,7 +122,7 @@ async def update_project(
 @router.delete("/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_project(
     project_id: uuid.UUID,
-    admin: User = Depends(require_role("admin")),
+    admin: User = Depends(require_subscription_and_role("admin")),
     db: AsyncSession = Depends(get_db),
 ) -> None:
     """Hard delete. CASCADE remove daily_reports e project_members."""
@@ -179,7 +143,7 @@ async def list_members(
     db: AsyncSession = Depends(get_db),
 ) -> list[MemberResponse]:
     """Lista members do projeto (precisa poder VER o projeto)."""
-    if not await _user_can_see_project(db, user, project_id):
+    if not await user_can_see_project(db, user, project_id):
         raise HTTPException(status_code=404, detail="projeto não encontrado")
 
     stmt = (
@@ -211,7 +175,7 @@ async def list_members(
 async def add_member(
     project_id: uuid.UUID,
     payload: MemberAddRequest,
-    admin: User = Depends(require_role("admin")),
+    admin: User = Depends(require_subscription_and_role("admin")),
     db: AsyncSession = Depends(get_db),
 ) -> MemberResponse:
     """Admin adiciona user ao projeto.
@@ -267,7 +231,7 @@ async def add_member(
 async def remove_member(
     project_id: uuid.UUID,
     user_id: uuid.UUID,
-    admin: User = Depends(require_role("admin")),
+    admin: User = Depends(require_subscription_and_role("admin")),
     db: AsyncSession = Depends(get_db),
 ) -> None:
     """Admin remove user do projeto. Idempotente: 204 mesmo se já não era member."""
