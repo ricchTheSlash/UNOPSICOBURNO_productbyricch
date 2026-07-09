@@ -79,6 +79,7 @@ class Company(Base):
     users: Mapped[list["User"]] = relationship(back_populates="company")
     projects: Mapped[list["CGHProject"]] = relationship(back_populates="company")
     subscriptions: Mapped[list["Subscription"]] = relationship(back_populates="company")
+    workers: Mapped[list["Worker"]] = relationship(back_populates="company")
 
 
 # =============================================================================
@@ -304,6 +305,116 @@ class DailyReport(Base):
     )
 
     project: Mapped["CGHProject"] = relationship(back_populates="reports")
+    attendance: Mapped[list["Attendance"]] = relationship(
+        back_populates="report", cascade="all, delete-orphan"
+    )
+
+
+# =============================================================================
+# Worker  -  trabalhador do canteiro (NÃO é um user do sistema).
+# =============================================================================
+# Diferença crucial em relação a `users`:
+#   - `users` autenticam, têm papel (admin/engineer/client) e enxergam dados.
+#   - `workers` são o efetivo de campo (pedreiro, servente, eletricista...).
+#     Não logam. São registros que o engenheiro gerencia; alimentam a
+#     presença (attendance) no RDO e, no futuro, folha e refeitório.
+class Worker(Base):
+    __tablename__ = "workers"
+    __table_args__ = (
+        CheckConstraint(
+            "employment_type IN ('clt', 'diarista')",
+            name="ck_workers_employment_type",
+        ),
+        CheckConstraint(
+            "daily_rate_cents IS NULL OR daily_rate_cents >= 0",
+            name="ck_workers_daily_rate",
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+
+    company_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("companies.id", ondelete="RESTRICT"),
+        nullable=False,
+        index=True,
+    )
+
+    full_name: Mapped[str] = mapped_column(Text, nullable=False)
+    # Função no canteiro (texto livre: pedreiro, servente, eletricista, operador...).
+    role: Mapped[str] = mapped_column(Text, nullable=False)
+    employment_type: Mapped[str] = mapped_column(Text, nullable=False)
+
+    cpf: Mapped[str | None] = mapped_column(Text)
+    phone: Mapped[str | None] = mapped_column(Text)
+
+    # Valor da diária (diarista) ou custo/dia (CLT), em centavos. Opcional aqui;
+    # cálculo de folha entra em fase futura.
+    daily_rate_cents: Mapped[int | None] = mapped_column(Integer)
+
+    # Soft-delete: worker com histórico de attendance não pode ser hard-deletado
+    # (FK RESTRICT); a rota DELETE oferece desativação neste caso.
+    is_active: Mapped[bool] = mapped_column(
+        nullable=False, server_default=text("true")
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("NOW()")
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("NOW()")
+    )
+
+    company: Mapped["Company"] = relationship(back_populates="workers")
+
+
+# =============================================================================
+# Attendance  -  presença de um worker num RDO específico.
+# =============================================================================
+# Ligada ao `daily_report` (não a project+date direto): o RDO é a "assinatura"
+# do dia; a presença é o detalhe de quem estava. Se o RDO for deletado, a
+# presença some junto (CASCADE). O worker, porém, é preservado (RESTRICT).
+class Attendance(Base):
+    __tablename__ = "attendance"
+    __table_args__ = (
+        UniqueConstraint(
+            "daily_report_id", "worker_id", name="uq_attendance_report_worker"
+        ),
+        CheckConstraint(
+            "status IN ('present', 'absent', 'half_day')",
+            name="ck_attendance_status",
+        ),
+        CheckConstraint(
+            "hours_worked IS NULL OR (hours_worked >= 0 AND hours_worked <= 24)",
+            name="ck_attendance_hours",
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = _uuid_pk()
+
+    daily_report_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("daily_reports.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    worker_id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("workers.id", ondelete="RESTRICT"),
+        nullable=False,
+        index=True,
+    )
+
+    status: Mapped[str] = mapped_column(Text, nullable=False)
+    hours_worked: Mapped[float | None] = mapped_column(Numeric(4, 1))
+    notes: Mapped[str | None] = mapped_column(Text)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("NOW()")
+    )
+
+    report: Mapped["DailyReport"] = relationship(back_populates="attendance")
+    worker: Mapped["Worker"] = relationship()
 
 
 # =============================================================================

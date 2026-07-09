@@ -53,9 +53,10 @@ Stack is fully async (`AsyncSession` on asyncpg). Never introduce a sync DB call
 Compose via `Depends()`:
 - `get_current_user` → JWT decode + DB lookup + `is_active` check (401 on any failure)
 - `require_active_subscription` → above + `companies.subscription_active` (402 if off)
-- `require_role(*roles)` → above + role membership (403 if mismatch)
+- `require_role(*roles)` → `get_current_user` + role membership (403). **Does NOT check subscription** — reserve for routes that must work while unpaid (future billing/checkout).
+- `require_subscription_and_role(*roles)` → subscription (402) **then** role (403). **This is the default for business mutation routes** (projects, workers, RDO). Order matters: an unpaid company sees 402, not 403.
 
-The middleware does **not** auto-scope queries by `company_id`. Routes must do that explicitly (rule 1).
+The middleware does **not** auto-scope queries by `company_id`. Routes must do that explicitly (rule 1). Project-access checks (admin=company, engineer/client=membership) live in `app/access.py` (`user_can_see_project`, `get_project_or_404`) — import from there, never from another router.
 
 ### 5. JWT discipline
 `security.decode_token(token, expected_type=...)` REQUIRES `expected_type` (`"access"` or `"refresh"`). It refuses tokens whose `typ` claim doesn't match — defense against using a refresh where an access is expected. Never bypass.
@@ -88,17 +89,23 @@ Pydantic v2 + FastAPI evaluate request body annotations at decorator time. With 
 
 ### 12. Anti-enumeration defaults
 - Login: 401 with identical `credenciais inválidas` for wrong-password AND non-existent email. Timing equalized via a precomputed `DUMMY_HASH` (argon2 of a throwaway string at module load in `app/security.py`).
-- Cross-tenant resource access: 404 with `não encontrado`, never 403. Same message as "actually doesn't exist". See `_get_project_or_404` in `app/routers/projects.py`.
+- Cross-tenant resource access: 404 with `não encontrado`, never 403. Same message as "actually doesn't exist". See `get_project_or_404` in `app/access.py`.
+
+### 13. Workers are NOT users; attendance lives under the RDO
+- `workers` = field roster (pedreiro, servente...). They **never authenticate** — no login, no `users` row, no role. Managed by admin/engineer. Company-scoped by `company_id`.
+- `attendance` FKs `daily_report_id` (CASCADE — presence dies with the RDO) and `worker_id` (RESTRICT — a worker with history can't be hard-deleted; `DELETE /workers/{id}` returns 409 and directs to `is_active=false`).
+- **RDO (`daily_reports`) is immutable**: no `updated_at`, no PATCH route. A mis-filed RDO is deleted (admin only) and re-created. Attendance, being operational, *can* be added/removed after creation via the nested `attendance` sub-routes.
+- Filing an RDO requires project access (`get_project_or_404`), so an engineer must be a `project_members` row for that project — not just any engineer in the company.
 
 ## Permissioning model
 
-| Role | What they see | What they can do |
+| Role | Projects visible | Can do |
 |---|---|---|
-| `admin` | All projects in their company (does NOT need `project_members` rows) | Create/edit/delete projects; manage members; create invites |
-| `engineer` | Only projects where they appear in `project_members` | (Future PRs) sign RDOs for their assigned projects |
-| `client` | Only projects where they appear in `project_members` | Read-only on their assigned projects (future PRs) |
+| `admin` | All in company (no `project_members` needed) | CRUD projects; manage members; invites; workers CRUD; delete RDOs |
+| `engineer` | Only where in `project_members` | File RDOs + attendance on assigned projects; workers CRUD |
+| `client` | Only where in `project_members` | Read-only (projects, RDOs); no workers, no RDO creation |
 
-Admins are **never** added to `project_members`. `POST /projects/{id}/members` rejects self-assignment with 400.
+Admins are **never** added to `project_members`. `POST /projects/{id}/members` rejects self-assignment with 400. Workers roster is company-wide (not per-project) — any admin/engineer manages it.
 
 ## Repository
 

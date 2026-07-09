@@ -99,12 +99,38 @@ async def require_active_subscription(
 def require_role(*allowed: str) -> Callable[..., User]:
     """
     Factory: gera uma dependency que só deixa passar users com role em `allowed`.
+    NÃO checa assinatura — use para rotas que devem funcionar mesmo sem
+    assinatura ativa (ex.: futuras rotas de billing/checkout).
 
         Depends(require_role("admin"))
         Depends(require_role("admin", "engineer"))
     """
 
     async def _checker(user: User = Depends(get_current_user)) -> User:
+        if user.role not in allowed:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"role requerida: {', '.join(allowed)}",
+            )
+        return user
+
+    return _checker
+
+
+def require_subscription_and_role(*allowed: str) -> Callable[..., User]:
+    """
+    Factory que exige AS DUAS coisas: assinatura ativa (402 se inativa) E role
+    permitida (403 se não). É a dependency padrão de rotas de negócio que
+    mutam dados (criar projeto, RDO, worker...).
+
+    Ordem: assinatura primeiro (402), depois role (403). Assim uma empresa
+    inadimplente vê "pague o boleto" em vez de "role errada".
+
+        Depends(require_subscription_and_role("admin"))
+        Depends(require_subscription_and_role("admin", "engineer"))
+    """
+
+    async def _checker(user: User = Depends(require_active_subscription)) -> User:
         if user.role not in allowed:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,

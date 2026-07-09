@@ -13,18 +13,23 @@ backend/
 │   ├── main.py             # FastAPI app + wiring (CORS, rate limit, routers, lifespan)
 │   ├── config.py           # Settings via pydantic-settings (.env)
 │   ├── database.py         # Engine async + SessionLocal
-│   ├── models.py           # Modelos SQLAlchemy (Company, User, CGHProject, DailyReport, Subscription, Invite, RefreshToken)
+│   ├── models.py           # Modelos SQLAlchemy (Company, User, CGHProject, ProjectMember, DailyReport, Worker, Attendance, Subscription, Invite, RefreshToken)
 │   ├── security.py         # argon2id + JWT encode/decode + tokens opacos
-│   ├── deps.py             # get_current_user, require_role, require_active_subscription
+│   ├── deps.py             # get_current_user, require_role, require_active_subscription, require_subscription_and_role
+│   ├── access.py           # Helpers de acesso a projeto (compartilhados entre routers)
 │   ├── rate_limit.py       # slowapi Limiter
 │   ├── logging_setup.py    # Loguru + masking de PII (e-mail, CPF, JWT)
 │   ├── schemas/
-│   │   ├── auth.py         # Schemas Pydantic (Register, Login, Refresh, Invite*)
-│   │   └── projects.py     # ProjectCreate/Update/Response, MemberAddRequest/Response
+│   │   ├── auth.py         # Register, Login, Refresh, Invite*
+│   │   ├── projects.py     # ProjectCreate/Update/Response, Member*
+│   │   ├── workers.py      # WorkerCreate/Update/Response
+│   │   └── reports.py      # RDOCreate/Response/Detail, Attendance*
 │   ├── routers/
 │   │   ├── auth.py         # /auth/register, /login, /refresh, /logout
 │   │   ├── invites.py      # /auth/invites, /auth/invites/{token}/accept
-│   │   └── projects.py     # /projects CRUD + /projects/{id}/members
+│   │   ├── projects.py     # /projects CRUD + /projects/{id}/members
+│   │   ├── workers.py      # /workers CRUD
+│   │   └── reports.py      # /projects/{id}/reports (RDO) + attendance
 │   └── services/
 │       ├── asaas.py        # Cliente HTTP do Asaas (create_customer)
 │       └── email.py        # EmailProvider (Console + Resend) + send_invite_email
@@ -33,7 +38,9 @@ backend/
 │   ├── script.py.mako
 │   └── versions/
 │       ├── 20260513_1500_initial_schema.py
-│       └── 20260513_1700_auth_invites_refresh_tokens.py
+│       ├── 20260513_1700_auth_invites_refresh_tokens.py
+│       ├── 20260513_1800_project_members.py
+│       └── 20260514_2100_workers_attendance.py
 ├── alembic.ini
 ├── requirements.txt
 └── .env.example
@@ -68,6 +75,33 @@ Todas as rotas requerem **assinatura ativa** (`require_active_subscription`,
 | POST | `/projects/{id}/members` | bearer (admin) | Atribui user (engineer/client) ao projeto |
 | DELETE | `/projects/{id}/members/{user_id}` | bearer (admin) | Remove user (idempotente) |
 
+### Workers — efetivo de campo (PR #7)
+
+Roster da empresa. `admin` e `engineer` gerenciam; `client` não acessa (403).
+Todas exigem assinatura ativa.
+
+| Método | Path | Auth | O que faz |
+|---|---|---|---|
+| POST | `/workers` | admin/engineer | Cadastra worker no roster da company |
+| GET | `/workers` | admin/engineer | Lista roster (`?include_inactive=true` inclui desativados) |
+| GET | `/workers/{id}` | admin/engineer | Detalhe |
+| PATCH | `/workers/{id}` | admin/engineer | Update parcial (inclui `is_active` p/ (des)ativar) |
+| DELETE | `/workers/{id}` | admin/engineer | Hard delete; 409 se tiver presença (sugere desativar) |
+
+### RDO (Relatório Diário de Obra) + presença (PR #7)
+
+Aninhado sob `/projects/{project_id}/reports`. Requer acesso à obra.
+O RDO é **imutável** (sem PATCH). Presença é dado operacional corrigível.
+
+| Método | Path | Auth | O que faz |
+|---|---|---|---|
+| POST | `/projects/{pid}/reports` | admin/engineer com acesso | Cria RDO (presença opcional embutida); 409 se já houver RDO na data |
+| GET | `/projects/{pid}/reports` | com acesso (inclui client) | Lista RDOs da obra |
+| GET | `/projects/{pid}/reports/{id}` | com acesso | Detalhe do RDO + presença |
+| DELETE | `/projects/{pid}/reports/{id}` | admin | Remove RDO mal-lançado (CASCADE na presença) |
+| POST | `/projects/{pid}/reports/{id}/attendance` | admin/engineer com acesso | Adiciona presença de 1 worker |
+| DELETE | `/projects/{pid}/reports/{id}/attendance/{worker_id}` | admin/engineer com acesso | Remove presença (idempotente) |
+
 ### Outros
 
 | Método | Path | Auth | O que faz |
@@ -90,6 +124,11 @@ Cinco tabelas, todas com **multi-tenancy** via `company_id`:
   da company; engineers/clients só projetos onde estão como member.
 - **`daily_reports`** — RDOs. 1 por projeto por dia (UNIQUE constraint).
   Sem `updated_at` propositalmente: histórico imutável.
+- **`workers`** — efetivo de campo (NÃO são users; não logam). Pertencem a uma
+  `company_id`. `employment_type` = `clt`/`diarista`. Soft-delete via `is_active`.
+- **`attendance`** — presença de um worker num RDO. FK `daily_report_id`
+  CASCADE (some com o RDO); FK `worker_id` RESTRICT (preserva o worker).
+  UNIQUE(daily_report_id, worker_id).
 - **`subscriptions`** — espelho local da assinatura no Asaas. Pertence à
   empresa (não a um user específico).
 
@@ -189,7 +228,6 @@ e-mail é a única forma de o destinatário obter o link.
 
 ## Próximas fases
 
-- **PR #7** — `workers` + `attendance` + criação/listagem de RDOs.
 - **PR #7.5** — Endpoint `POST /subscriptions/checkout` (cria assinatura
   no Asaas).
 - **PR #8** — Webhook `/webhooks/asaas` com verificação de assinatura.
