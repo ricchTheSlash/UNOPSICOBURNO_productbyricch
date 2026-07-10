@@ -53,7 +53,7 @@ Stack is fully async (`AsyncSession` on asyncpg). Never introduce a sync DB call
 Compose via `Depends()`:
 - `get_current_user` → JWT decode + DB lookup + `is_active` check (401 on any failure)
 - `require_active_subscription` → above + `companies.subscription_active` (402 if off)
-- `require_role(*roles)` → `get_current_user` + role membership (403). **Does NOT check subscription** — reserve for routes that must work while unpaid (future billing/checkout).
+- `require_role(*roles)` → `get_current_user` + role membership (403). **Does NOT check subscription** — for routes that must work while unpaid. This is exactly what `/subscriptions/checkout` uses: the company is paying *to get* a subscription, so requiring one would deadlock.
 - `require_subscription_and_role(*roles)` → subscription (402) **then** role (403). **This is the default for business mutation routes** (projects, workers, RDO). Order matters: an unpaid company sees 402, not 403.
 
 The middleware does **not** auto-scope queries by `company_id`. Routes must do that explicitly (rule 1). Project-access checks (admin=company, engineer/client=membership) live in `app/access.py` (`user_can_see_project`, `get_project_or_404`) — import from there, never from another router.
@@ -96,6 +96,9 @@ Pydantic v2 + FastAPI evaluate request body annotations at decorator time. With 
 - `attendance` FKs `daily_report_id` (CASCADE — presence dies with the RDO) and `worker_id` (RESTRICT — a worker with history can't be hard-deleted; `DELETE /workers/{id}` returns 409 and directs to `is_active=false`).
 - **RDO (`daily_reports`) is immutable**: no `updated_at`, no PATCH route. A mis-filed RDO is deleted (admin only) and re-created. Attendance, being operational, *can* be added/removed after creation via the nested `attendance` sub-routes.
 - Filing an RDO requires project access (`get_project_or_404`), so an engineer must be a `project_members` row for that project — not just any engineer in the company.
+
+### 14. Billing: checkout creates intent, webhook activates
+`POST /subscriptions/checkout` (`app/routers/subscriptions.py`) creates the Asaas subscription and persists a local `subscriptions` row, but **does NOT set `companies.subscription_active`**. That flag flips only when the Asaas webhook confirms a *payment* (PR #8, not yet built). So right after checkout the company still gets 402 on business routes — by design. Checkout is idempotent: a repeat call with a non-terminal subscription re-returns the same payment link instead of creating a second Asaas subscription. `subscriptions.billing_type` only accepts `PIX`/`BOLETO`/`CREDIT_CARD` (DB CHECK) — no `UNDEFINED`. Asaas monetary values are **reais (float)**, so `asaas.py` converts `value_cents / 100`.
 
 ## Permissioning model
 

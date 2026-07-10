@@ -20,6 +20,12 @@ class Settings(BaseSettings):
     ASAAS_API_KEY: str
     ASAAS_BASE_URL: str = "https://sandbox.asaas.com/api"
 
+    # Plano de assinatura (mensalidade da empresa no SaaS).
+    SUBSCRIPTION_PLAN_NAME: str = "mensal"
+    SUBSCRIPTION_VALUE_CENTS: int = 9900          # R$ 99,00
+    # Dias a partir de hoje para a 1ª cobrança da assinatura.
+    SUBSCRIPTION_FIRST_DUE_DAYS: int = 3
+
     # --- App ------------------------------------------------------------------
     APP_ENV: str = "development"
 

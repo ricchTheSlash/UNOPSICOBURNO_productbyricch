@@ -23,15 +23,17 @@ backend/
 │   │   ├── auth.py         # Register, Login, Refresh, Invite*
 │   │   ├── projects.py     # ProjectCreate/Update/Response, Member*
 │   │   ├── workers.py      # WorkerCreate/Update/Response
-│   │   └── reports.py      # RDOCreate/Response/Detail, Attendance*
+│   │   ├── reports.py      # RDOCreate/Response/Detail, Attendance*
+│   │   └── subscriptions.py# CheckoutRequest/Response, SubscriptionResponse
 │   ├── routers/
 │   │   ├── auth.py         # /auth/register, /login, /refresh, /logout
 │   │   ├── invites.py      # /auth/invites, /auth/invites/{token}/accept
 │   │   ├── projects.py     # /projects CRUD + /projects/{id}/members
 │   │   ├── workers.py      # /workers CRUD
-│   │   └── reports.py      # /projects/{id}/reports (RDO) + attendance
+│   │   ├── reports.py      # /projects/{id}/reports (RDO) + attendance
+│   │   └── subscriptions.py# /subscriptions/checkout + /current
 │   └── services/
-│       ├── asaas.py        # Cliente HTTP do Asaas (create_customer)
+│       ├── asaas.py        # Cliente Asaas (create_customer, create_subscription, payments)
 │       └── email.py        # EmailProvider (Console + Resend) + send_invite_email
 ├── alembic/
 │   ├── env.py
@@ -101,6 +103,21 @@ O RDO é **imutável** (sem PATCH). Presença é dado operacional corrigível.
 | DELETE | `/projects/{pid}/reports/{id}` | admin | Remove RDO mal-lançado (CASCADE na presença) |
 | POST | `/projects/{pid}/reports/{id}/attendance` | admin/engineer com acesso | Adiciona presença de 1 worker |
 | DELETE | `/projects/{pid}/reports/{id}/attendance/{worker_id}` | admin/engineer com acesso | Remove presença (idempotente) |
+
+### Assinatura / checkout (PR #7.5)
+
+Usa `require_role("admin")` **sem** checagem de assinatura (a empresa está
+pagando justamente para ativá-la — exigir assinatura aqui seria deadlock).
+
+| Método | Path | Auth | O que faz |
+|---|---|---|---|
+| POST | `/subscriptions/checkout` | admin | Cria a assinatura no Asaas e devolve o link de pagamento (`payment_url`) |
+| GET | `/subscriptions/current` | admin | Assinatura corrente da empresa (404 se nunca houve checkout) |
+
+O checkout **não** liga `companies.subscription_active` — isso só acontece
+quando o webhook do Asaas confirmar o pagamento (PR #8). Checkout cria a
+intenção de pagar; a confirmação é assíncrona. Chamadas repetidas reusam a
+assinatura existente (idempotente), sem duplicar no Asaas.
 
 ### Outros
 
@@ -228,8 +245,7 @@ e-mail é a única forma de o destinatário obter o link.
 
 ## Próximas fases
 
-- **PR #7.5** — Endpoint `POST /subscriptions/checkout` (cria assinatura
-  no Asaas).
-- **PR #8** — Webhook `/webhooks/asaas` com verificação de assinatura.
+- **PR #8** — Webhook `/webhooks/asaas` com verificação de assinatura
+  (liga `companies.subscription_active` quando o pagamento é confirmado).
 - **PR #9** — Upload de fotos no Supabase Storage.
 - **PR #10** — Geração de PDF do RDO (WeasyPrint).

@@ -27,6 +27,7 @@ from app.routers import auth as auth_router
 from app.routers import invites as invites_router
 from app.routers import projects as projects_router
 from app.routers import reports as reports_router
+from app.routers import subscriptions as subscriptions_router
 from app.routers import workers as workers_router
 
 
@@ -76,6 +77,7 @@ app.include_router(invites_router.router)
 app.include_router(projects_router.router)
 app.include_router(workers_router.router)
 app.include_router(reports_router.router)
+app.include_router(subscriptions_router.router)
 
 
 # --- Health check -------------------------------------------------------------
